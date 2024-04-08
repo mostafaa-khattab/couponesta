@@ -513,9 +513,7 @@ cron.schedule('0 0 0 1 */2 *', async () => {
             if (document?.image) {
                 try {
                     fs.unlinkSync(document.image);
-                    // console.log("Image deleted:", document.image);
                 } catch (err) {
-                    // console.error("Error deleting image:", err);
                 }
             }
         });

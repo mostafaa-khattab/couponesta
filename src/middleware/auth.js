@@ -18,10 +18,10 @@ export const auth = (accessRoles = []) => {
             return next(new Error(`authorization dose't exist`, { cause: 400 }))
         }
 
-        if (!authorization?.startsWith(process.env.BEARER_KEY)) {
+        if (!authorization?.startsWith("Khattab__")) {
             return next(new Error(`In-valid bearer key`, { cause: 400 }))
         }
-        const token = authorization.split(process.env.BEARER_KEY)[1]
+        const token = authorization.split("Khattab__")[1]
 
         if (!token) {
             return next(new Error(`In-valid token`, { cause: 400 }))

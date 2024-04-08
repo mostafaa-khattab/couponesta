@@ -33,7 +33,7 @@ export const getAllUserFollow = asyncHandler(async (req, res, next) => {
 
     userFollow.follow?.forEach((coup, index) => {
 
-        userFollow.follow[index].image = process.env.BASE_URL + coup.image
+        userFollow.follow[index].image = "https://mostafa-e-commerce.onrender.com/" + coup.image
         coup.name = coup.name[`${locale}`] || `coupons- ${locale}`
         coup.description = coup.description[`${locale}`] || `coupons- ${locale}`
     })
@@ -59,7 +59,7 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
     users?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            users[index].image = process.env.BASE_URL + elm.image;
+            users[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
         }
     });
 
@@ -79,8 +79,8 @@ export const addUser = asyncHandler(async (req, res, next) => {
         }
 
         // send email
-        const token = generateToken({ payload: { email }, signature: process.env.EMAIL_TOKEN, expiresIn: 60 * 5 })
-        const refreshToken = generateToken({ payload: { email }, signature: process.env.EMAIL_TOKEN, expiresIn: 60 * 60 * 24 })
+        const token = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 5 })
+        const refreshToken = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 60 * 24 })
 
         const link = `${req.protocol}://${req.headers.host}/auth/confirmAccount/${token}`
         const rfLink = `${req.protocol}://${req.headers.host}/auth/NewconfirmAccount/${refreshToken}`
@@ -110,7 +110,7 @@ export const addUser = asyncHandler(async (req, res, next) => {
                                     </h1>
                                 </td>
                                 <td>
-                                    <p style="text-align: right;"><a href="${process.env.BASE_URL}" target="_blank"
+                                    <p style="text-align: right;"><a href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
                                             style="text-decoration: none;">View In Website</a></p>
                                 </td>
                             </tr>
@@ -229,7 +229,7 @@ export const addUser = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (user.image) {
-        user.image = process.env.BASE_URL + user.image;
+        user.image = "https://mostafa-e-commerce.onrender.com/" + user.image;
     }
 
     return res.status(201).json({ message: "success", user })
@@ -255,8 +255,8 @@ export const updateUser = asyncHandler(async (req, res, next) => {
         }
 
         // send email
-        const token = generateToken({ payload: { email }, signature: process.env.EMAIL_TOKEN, expiresIn: 60 * 5 })
-        const refreshToken = generateToken({ payload: { email }, signature: process.env.EMAIL_TOKEN, expiresIn: 60 * 60 * 24 })
+        const token = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 5 })
+        const refreshToken = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 60 * 24 })
 
         const link = `${req.protocol}://${req.headers.host}/auth/confirmAccount/${token}`
         const rfLink = `${req.protocol}://${req.headers.host}/auth/NewconfirmAccount/${refreshToken}`
@@ -286,7 +286,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
                                     </h1>
                                 </td>
                                 <td>
-                                    <p style="text-align: right;"><a href="${process.env.BASE_URL}" target="_blank"
+                                    <p style="text-align: right;"><a href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
                                             style="text-decoration: none;">View In Website</a></p>
                                 </td>
                             </tr>
@@ -429,7 +429,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (updatedUser.image) {
-        updatedUser.image = process.env.BASE_URL + updatedUser.image;
+        updatedUser.image = "https://mostafa-e-commerce.onrender.com/" + updatedUser.image;
     }
 
     return res.status(200).json({ message: "success", user: updatedUser });
@@ -492,7 +492,7 @@ export const getUsersDeleted = asyncHandler(async (req, res, next) => {
     user?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            user[index].image = process.env.BASE_URL + elm.image;
+            user[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
         }
     });
 

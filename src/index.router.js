@@ -28,6 +28,10 @@ const initApp = (app, express) => {
     app.use(`/ads`, adsRouter)
     app.use(`/notification`, notificationRouter)
 
+    app.use('/', (req, res, next) => {
+        return res.json({ message: "welcome to coponesta" })
+    })
+
     app.all('*', (req, res, next) => {
         return next(new Error(`invalid url can't access this endPoint Plz check url  or  method ${req.originalUrl}`, { cause: 404 }))
 

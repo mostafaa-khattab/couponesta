@@ -33,7 +33,7 @@ import cron from 'node-cron'
 
 //     brand?.forEach((elm, index) => {
 
-//         brand[index].image = process.env.BASE_URL + elm.image
+//         brand[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image
 
 //         elm.name = elm.name[`${locale}`] || `coupons- ${locale}`
 //         elm.description = elm.description[`${locale}`] || `coupons- ${locale}`
@@ -62,7 +62,7 @@ export const getBrands = asyncHandler(async (req, res, next) => {
     brand?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            brand[index].image = process.env.BASE_URL + elm.image;
+            brand[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
         }
 
         // Set name and description based on locale
@@ -115,7 +115,7 @@ export const getBrands = asyncHandler(async (req, res, next) => {
 
 //     // Append BASE_URL to the image field
 //     if (brand.image) {
-//         brand.image = process.env.BASE_URL + brand.image;
+//         brand.image = "https://mostafa-e-commerce.onrender.com/" + brand.image;
 //     }
 
 //     return res.status(200).json({ message: "success", brand });
@@ -185,7 +185,7 @@ export const getBrands = asyncHandler(async (req, res, next) => {
 
 //     // Append BASE_URL to the image field
 //     if (brand.image) {
-//         brand.image = process.env.BASE_URL + brand.image;
+//         brand.image = "https://mostafa-e-commerce.onrender.com/" + brand.image;
 //     }
 
 //     return res.status(201).json({ message: 'succuss', brand })
@@ -269,7 +269,7 @@ export const createBrand = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (brand.image) {
-        brand.image = process.env.BASE_URL + brand.image;
+        brand.image = "https://mostafa-e-commerce.onrender.com/" + brand.image;
     }
 
     return res.status(201).json({ message: 'success', brand });
@@ -377,7 +377,7 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (brand.image) {
-        brand.image = process.env.BASE_URL + brand.image;
+        brand.image = "https://mostafa-e-commerce.onrender.com/" + brand.image;
     }
 
     return res.status(201).json({ message: 'success', brand });
@@ -431,7 +431,7 @@ export const getBrandsDeleted = asyncHandler(async (req, res, next) => {
     brand?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            brand[index].image = process.env.BASE_URL + elm.image;
+            brand[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
         }
 
         // Set name and description based on locale

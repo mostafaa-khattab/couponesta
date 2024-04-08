@@ -67,7 +67,7 @@ const locationSchema = new Schema({
 
 // locationSchema.post('init', function (doc) {
 //     if (!initialized) {
-//         doc.image = process.env.BASE_URL + doc.image;
+//         doc.image = "https://mostafa-e-commerce.onrender.com/" + doc.image;
 //         initialized = true;
 //     }
 // });

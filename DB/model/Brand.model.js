@@ -77,7 +77,7 @@ const brandSchema = new Schema({
 
 
 // brandSchema.post('init', function (doc) {
-//         doc.image = process.env.BASE_URL + doc.image;
+//         doc.image = "https://mostafa-e-commerce.onrender.com/" + doc.image;
 
 // });
 

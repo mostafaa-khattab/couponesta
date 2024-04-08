@@ -13,7 +13,7 @@ import cron from 'node-cron'
 
 //     location?.forEach((elm, index) => {
 
-//         location[index].image = process.env.BASE_URL + elm.image
+//         location[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image
 //     })
 
 //     return res.status(200).json({ message: 'succuss', location })
@@ -37,7 +37,7 @@ export const getLocations = asyncHandler(async (req, res, next) => {
     location?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            location[index].image = process.env.BASE_URL + elm.image;
+            location[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
         }
 
     });
@@ -53,7 +53,7 @@ export const getLocations = asyncHandler(async (req, res, next) => {
 
 //     // Append BASE_URL to the image field
 //     if (location.image) {
-//         location.image = process.env.BASE_URL + location.image;
+//         location.image = "https://mostafa-e-commerce.onrender.com/" + location.image;
 //     }
 
 // !location && next(new Error(`location not found ${req.params.locationId}`, { cause: 404 }))
@@ -146,7 +146,7 @@ export const updateLocation = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (location.image) {
-        location.image = process.env.BASE_URL + location.image;
+        location.image = "https://mostafa-e-commerce.onrender.com/" + location.image;
     }
 
     return res.status(201).json({ message: 'succuss', location })
@@ -201,7 +201,7 @@ export const getLocationsDeleted = asyncHandler(async (req, res, next) => {
     location?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            location[index].image = process.env.BASE_URL + elm.image;
+            location[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
         }
 
     });

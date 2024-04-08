@@ -18,8 +18,8 @@ export const signupEmail = asyncHandler(async (req, res, next) => {
     }
 
     // send email
-    const token = generateToken({ payload: { email }, signature: process.env.EMAIL_TOKEN, expiresIn: 60 * 5 })
-    const refreshToken = generateToken({ payload: { email }, signature: process.env.EMAIL_TOKEN, expiresIn: 60 * 60 * 24 })
+    const token = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 5 })
+    const refreshToken = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 60 * 24 })
 
     const link = `${req.protocol}://${req.headers.host}/auth/confirmAccount/${token}`
     const rfLink = `${req.protocol}://${req.headers.host}/auth/NewconfirmAccount/${refreshToken}`
@@ -49,7 +49,7 @@ export const signupEmail = asyncHandler(async (req, res, next) => {
                                 </h1>
                             </td>
                             <td>
-                                <p style="text-align: right;"><a href="${process.env.BASE_URL}" target="_blank"
+                                <p style="text-align: right;"><a href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
                                         style="text-decoration: none;">View In Website</a></p>
                             </td>
                         </tr>
@@ -189,7 +189,7 @@ export const signupPhone = asyncHandler(async (req, res, next) => {
 export const confirmAccount = asyncHandler(async (req, res, next) => {
 
     const { token } = req.params
-    const { email } = verifyToken({ token, signature: process.env.EMAIL_TOKEN })
+    const { email } = verifyToken({ token, signature: "saving-coupons-signature by khattab@gmail.com" })
     if (!email) {
         return next(new Error(`In-valid token payload`, { cause: 400 }))
     }
@@ -206,7 +206,7 @@ export const confirmAccount = asyncHandler(async (req, res, next) => {
 export const RequestNewconfirmAccount = asyncHandler(async (req, res, next) => {
 
     const { token } = req.params
-    const { email } = verifyToken({ token, signature: process.env.EMAIL_TOKEN })
+    const { email } = verifyToken({ token, signature: "saving-coupons-signature by khattab@gmail.com" })
     if (!email) {
         return next(new Error(`In-valid token payload`, { cause: 400 }))
     }
@@ -221,7 +221,7 @@ export const RequestNewconfirmAccount = asyncHandler(async (req, res, next) => {
 
     }
 
-    const newToken = generateToken({ payload: { email }, signature: process.env.EMAIL_TOKEN, expiresIn: 60 * 2 })
+    const newToken = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 2 })
 
     const link = `${req.protocol}://${req.headers.host}/auth/confirmAccount/${newToken}`
     const rfLink = `${req.protocol}://${req.headers.host}/auth/NewconfirmAccount/${token}`
@@ -252,7 +252,7 @@ export const RequestNewconfirmAccount = asyncHandler(async (req, res, next) => {
                                 </h1>
                             </td>
                             <td>
-                                <p style="text-align: right;"><a href="${process.env.BASE_URL}" target="_blank"
+                                <p style="text-align: right;"><a href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
                                         style="text-decoration: none;">View In Website</a></p>
                             </td>
                         </tr>

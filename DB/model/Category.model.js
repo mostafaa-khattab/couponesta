@@ -74,7 +74,7 @@ const categorySchema = new Schema({
 
 
 // categorySchema.post('init', function (doc) {
-//     doc.image = process.env.BASE_URL + doc.image;
+//     doc.image = "https://mostafa-e-commerce.onrender.com/" + doc.image;
 // });
 
 const categoryModel = mongoose.models.Category || model("Category", categorySchema)

@@ -30,7 +30,7 @@ import cron from 'node-cron'
 
 //     category?.forEach((cat, index) => {
 
-//         category[index].image = process.env.BASE_URL + cat.image
+//         category[index].image = "https://mostafa-e-commerce.onrender.com/" + cat.image
 
 //         cat.name = cat.name[`${locale}`] || `coupons- ${locale}`
 //         cat.description = cat.description[`${locale}`] || `coupons- ${locale}`
@@ -80,7 +80,7 @@ import cron from 'node-cron'
 
 //     // Append BASE_URL to the image field
 //     if (category.image) {
-//         category.image = process.env.BASE_URL + category.image;
+//         category.image = "https://mostafa-e-commerce.onrender.com/" + category.image;
 //     }
 
 //     return res.status(200).json({ message: "success", category });
@@ -107,7 +107,7 @@ export const getCategories = asyncHandler(async (req, res, next) => {
     category?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            category[index].image = process.env.BASE_URL + elm.image;
+            category[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
         }
 
         // Set name and description based on locale
@@ -186,7 +186,7 @@ export const createCategory = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (category.image) {
-        category.image = process.env.BASE_URL + category.image;
+        category.image = "https://mostafa-e-commerce.onrender.com/" + category.image;
     }
 
     return res.status(201).json({ message: 'success', category });
@@ -262,7 +262,7 @@ export const createCategory = asyncHandler(async (req, res, next) => {
 
 // // Append BASE_URL to the image field
 // if (category.image) {
-//     category.image = process.env.BASE_URL + category.image;
+//     category.image = "https://mostafa-e-commerce.onrender.com/" + category.image;
 // }
 
 // return res.status(201).json({ message: 'success', category });
@@ -354,7 +354,7 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (category.image) {
-        category.image = process.env.BASE_URL + category.image;
+        category.image = "https://mostafa-e-commerce.onrender.com/" + category.image;
     }
 
 
@@ -410,7 +410,7 @@ export const getCategoriesDeleted = asyncHandler(async (req, res, next) => {
     category?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            category[index].image = process.env.BASE_URL + elm.image;
+            category[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
         }
 
         // Set name and description based on locale

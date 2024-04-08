@@ -394,7 +394,9 @@ export const deleteBrand = asyncHandler(async (req, res, next) => {
     if (brand?.image) {
         try {
             fs.unlinkSync(brand?.image);
+            // console.log("Image deleted:", document.image);
         } catch (err) {
+            // console.error("Error deleting image:", err);
         }
     }
 

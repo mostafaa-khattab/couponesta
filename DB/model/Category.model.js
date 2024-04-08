@@ -73,5 +73,9 @@ const categorySchema = new Schema({
 })
 
 
+// categorySchema.post('init', function (doc) {
+//     doc.image = process.env.BASE_URL + doc.image;
+// });
+
 const categoryModel = mongoose.models.Category || model("Category", categorySchema)
 export default categoryModel

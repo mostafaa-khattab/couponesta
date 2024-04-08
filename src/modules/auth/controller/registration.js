@@ -18,8 +18,8 @@ export const signupEmail = asyncHandler(async (req, res, next) => {
     }
 
     // send email
-    const token = generateToken({ payload: { email }, signature: `${process.env.EMAIL_TOKEN}` || "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 5 })
-    const refreshToken = generateToken({ payload: { email }, signature: `${process.env.EMAIL_TOKEN}` || "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 60 * 24 })
+    const token = generateToken({ payload: { email }, signature: process.env.EMAIL_TOKEN, expiresIn: 60 * 5 })
+    const refreshToken = generateToken({ payload: { email }, signature: process.env.EMAIL_TOKEN, expiresIn: 60 * 60 * 24 })
 
     const link = `${req.protocol}://${req.headers.host}/auth/confirmAccount/${token}`
     const rfLink = `${req.protocol}://${req.headers.host}/auth/NewconfirmAccount/${refreshToken}`

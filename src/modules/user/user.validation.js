@@ -45,6 +45,7 @@ export const updateUserValidation = joi.object({
     phoneNumber: joi.string(),
     countryCode: joi.string(),
     isDeleted: joi.boolean(),
+    confirmAccount: joi.boolean(),
 
 }).required()
 

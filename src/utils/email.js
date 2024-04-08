@@ -4,8 +4,8 @@ async function sendEmail({ to, cc, bcc, subject, html, attachments = [] } = {}) 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.gmail, // generated ethereal user
-            pass: process.env.gmailPass, // generated ethereal password
+            user: process.env.gmail || "workteach83@gmail.com", // generated ethereal user
+            pass: process.env.gmailPass || "mwpz tgqj gkte qxoe", // generated ethereal password
         },
     });
 

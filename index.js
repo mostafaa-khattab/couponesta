@@ -2,8 +2,10 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
 import i18n from 'i18n';
+import cors from 'cors'
 
 const app = express()
+app.use(cors())
 
 //set directory dirname 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))

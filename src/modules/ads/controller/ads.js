@@ -1,4 +1,4 @@
-import adsModel from "../../../../DB/model/ads.model.js";
+import adsModel from "../../../../DB/model/Ads.model.js";
 import fs from 'fs'
 import { asyncHandler } from "../../../utils/errorHandling.js";
 import locationModel from "../../../../DB/model/Location.model.js";

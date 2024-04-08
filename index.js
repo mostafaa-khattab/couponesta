@@ -3,6 +3,8 @@ import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
 import i18n from 'i18n';
 import cors from 'cors'
+import cron from 'node-cron'
+import http from 'http'
 
 const app = express()
 app.use(cors())
@@ -32,6 +34,18 @@ app.use((req, res, next) => {
     next();
 });
 
+
+// Schedule a job to delete userModel older than 60 days
+cron.schedule('*/15 * * * *', async () => {
+    try {
+
+        console.log('Waking up server...');
+
+    } catch (error) {
+        // new Error('Error deleting');
+    }
+
+});
 
 // setup port and the baseUrl
 const port = process.env.PORT || 5000

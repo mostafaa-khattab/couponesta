@@ -18,6 +18,7 @@ router.post('/',
     validation(validators.createCategoryValidation),
     categoryController.createCategory)
 
+    
 router.put('/:categoryId',
     auth([roles.Admin]),
     fileUpload('category', fileValidation.image).single('image'),

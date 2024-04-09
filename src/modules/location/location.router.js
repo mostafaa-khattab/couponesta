@@ -32,8 +32,5 @@ router.delete('/:locationId',
     validation(validators.deleteLocationValidation),
     locationController.deleteLocation)
 
-// router.get('/:locationId',
-//     validation(validators.getOneLocationValidation),
-//     locationController.getOneLocation)
 
 export default router

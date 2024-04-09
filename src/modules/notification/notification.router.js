@@ -30,7 +30,7 @@ router.put('/trash/:locale?',
     notificationController.getNotificationsDeleted)
 
 router.delete('/:notificationId',
-    auth([roles.Admin]),
+    auth([roles.Admin, roles.User]),
     validation(validators.deleteNotificationValidation),
     notificationController.deleteNotification)
 

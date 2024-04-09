@@ -15,7 +15,7 @@ export default class ApiFeatures {
         }
 
         if (!limit || limit <= 0) {
-            limit = 20
+            limit = 50
         }
 
         page = parseInt(page)
@@ -23,7 +23,7 @@ export default class ApiFeatures {
 
         const skip = (page - 1) * limit
         this.mongooseQuery.limit(limit).skip(skip)
-        return this        
+        return this
     }
 
     filter() {
@@ -43,7 +43,7 @@ export default class ApiFeatures {
         return this
     }
 
-    
+
     search() {
         if (this.queryData.search) {
 
@@ -51,7 +51,8 @@ export default class ApiFeatures {
                 $or: [
                     { 'name.en': { $regex: this.queryData.search, $options: 'i' } },
                     { 'name.ar': { $regex: this.queryData.search, $options: 'i' } },
-                    { slug: { $regex: this.queryData.search, $options: 'i' } },
+                    { 'slug.en': { $regex: this.queryData.search, $options: 'i' } },
+                    { 'slug.ar': { $regex: this.queryData.search, $options: 'i' } },
                     { code: { $regex: this.queryData.search, $options: 'i' } },
                 ]
             })

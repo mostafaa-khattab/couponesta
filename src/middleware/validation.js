@@ -2,8 +2,7 @@ import joi from 'joi'
 import { Types } from 'mongoose'
 
 const validateObjectId = (value, helper) => {
-    // console.log({ value });
-    // console.log(helper);
+    
     return Types.ObjectId.isValid(value) ? true : helper.message('In-valid objectId')
 }
 
@@ -14,7 +13,6 @@ export const generalFields = {
         maxDomainSegments: 4,
         tlds: { allow: ['com', 'net', 'co'] }
     }).required(),
-    // password: joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)).required(),
     password: joi.string().pattern(/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{7,}$/).required(),
     cPassword: joi.string().required(),
     id: joi.string().custom(validateObjectId).required(),
@@ -39,12 +37,6 @@ export const validation = (schema) => {
     return (req, res, next) => {
 
         let inputsData = { ...req.body, ...req.params, ...req.query }
-
-        // console.log(inputsData);
-        // if (req.file || req.files) {
-        //     inputsData.file = req.file || req.files
-
-        // }
 
         const validationResult = schema.validate(inputsData, { abortEarly: false })
         if (validationResult.error) {

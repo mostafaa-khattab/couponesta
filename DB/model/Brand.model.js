@@ -75,11 +75,5 @@ const brandSchema = new Schema({
     timestamps: true,
 })
 
-
-// brandSchema.post('init', function (doc) {
-//         doc.image = "https://mostafa-e-commerce.onrender.com/" + doc.image;
-
-// });
-
 const brandModel = mongoose.models.Brand || model("Brand", brandSchema)
 export default brandModel

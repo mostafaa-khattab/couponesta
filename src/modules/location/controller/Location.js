@@ -5,20 +5,6 @@ import ApiFeatures from "../../../utils/apiFeature.js";
 import cron from 'node-cron'
 
 
-// export const getLocations = asyncHandler(async (req, res, next) => {
-
-//     const location = await locationModel.find({
-//         isDeleted: false
-//     })
-
-//     location?.forEach((elm, index) => {
-
-//         location[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image
-//     })
-
-//     return res.status(200).json({ message: 'succuss', location })
-// })
-
 export const getLocations = asyncHandler(async (req, res, next) => {
 
     // Find brand matching the selected location or the default location
@@ -45,20 +31,6 @@ export const getLocations = asyncHandler(async (req, res, next) => {
 
     return res.status(200).json({ message: 'succuss', location })
 })
-
-
-// export const getOneLocation = asyncHandler(async (req, res, next) => {
-
-//     let location = await locationModel.findById(req.params.locationId)
-
-//     // Append BASE_URL to the image field
-//     if (location.image) {
-//         location.image = "https://mostafa-e-commerce.onrender.com/" + location.image;
-//     }
-
-// !location && next(new Error(`location not found ${req.params.locationId}`, { cause: 404 }))
-//     location && res.status(202).json({ message: "success", location })
-// })
 
 
 export const createLocation = asyncHandler(async (req, res, next) => {

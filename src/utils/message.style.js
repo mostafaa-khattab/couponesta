@@ -1,5 +1,5 @@
 
-export const sendCodeStyle = (link, userName = "mostafa") => {
+export const sendCodeStyle = (link, userName = "Couponesta") => {
     return `<table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout:fixed;background-color:#f9f9f9"
     id="bodyTable">
     <tbody>

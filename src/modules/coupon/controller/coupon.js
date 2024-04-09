@@ -239,6 +239,38 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
 
 })
 
+export const updateCouponLike = asyncHandler(async (req, res, next) => {
+
+    const { couponId } = req.params;
+    let coupon = await couponModel.findOne({ _id: couponId, isDeleted: false })
+    if (!coupon) {
+        return next(new Error(`In-valid coupon ID`, { cause: 400 }))
+    }
+
+    let { usedCount, likeCount, dislikeCount } = req.body;
+
+    req.body.updatedBy = req.user._id
+
+    coupon = await coupon.save();
+
+    coupon = await couponModel.findByIdAndUpdate(couponId,
+        {
+            usedCount,
+            likeCount,
+            dislikeCount
+        },
+        { new: true })
+
+    return res.status(201).json({
+        message: 'succuss', coupon: {
+            usedCount,
+            likeCount,
+            dislikeCount,
+            updatedBy: req.user._id
+        }
+    })
+})
+
 export const deleteCoupon = asyncHandler(async (req, res, next) => {
     const { couponId } = req.params;
 

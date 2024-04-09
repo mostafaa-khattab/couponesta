@@ -20,9 +20,11 @@ router.put('/:couponId',
     validation(validators.updateCouponValidation),
     couponController.updateCoupon)
 
-// router.get('/:locale?/:couponId',
-//     validation(validators.getOneCouponValidation),
-//     couponController.getOneCoupon)
+router.put('/like/:couponId',
+    auth([roles.User, roles.Admin]),
+    validation(validators.updateCouponLikeValidation),
+    couponController.updateCouponLike)
+
 
 router.put('/trash/:locale?',
     auth([roles.Admin]),

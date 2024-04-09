@@ -23,7 +23,7 @@ router.put('/:adsId',
     validation(validators.updateAdsValidation),
     adsController.updateAds)
 
-router.put('/trash',
+router.put('/trash/softDelete',
     auth([roles.Admin]),
     adsController.getAdsDeleted)
 
@@ -31,10 +31,6 @@ router.delete('/:adsId',
     auth([roles.Admin]),
     validation(validators.deleteAdsValidation),
     adsController.deleteAds)
-
-// router.get('/:adsId',
-//     validation(validators.getOneAdsValidation),
-//     adsController.getOneAds)
 
 
 export default router

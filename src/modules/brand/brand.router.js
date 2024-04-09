@@ -23,9 +23,6 @@ router.put('/:brandId',
     validation(validators.updateBrandValidation),
     brandController.updateBrand)
 
-// router.get('/:locale?/:brandId',
-//     validation(validators.getOneBrandValidation),
-//     brandController.getOneBrand)
 
 router.put('/trash/:locale?',
     auth([roles.Admin]),

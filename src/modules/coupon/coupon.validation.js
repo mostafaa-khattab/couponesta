@@ -57,6 +57,15 @@ export const updateCouponValidation = joi.object({
 
 }).required()
 
+export const updateCouponLikeValidation = joi.object({
+
+    couponId: generalFields.id,
+    usedCount: joi.number().min(0).integer(),
+    likeCount: joi.number().min(0).integer(),
+    dislikeCount: joi.number().min(0).integer(),
+
+}).required()
+
 export const getAllCouponValidation = joi.object({
 
     location: generalFields.idUpdate,

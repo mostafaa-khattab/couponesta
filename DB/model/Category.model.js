@@ -43,6 +43,8 @@ const categorySchema = new Schema({
 
     image: String,
 
+    icon: String,
+
     createdBy: {
         type: Types.ObjectId,
         ref: 'User',
@@ -72,10 +74,6 @@ const categorySchema = new Schema({
     timestamps: true,
 })
 
-
-// categorySchema.post('init', function (doc) {
-//     doc.image = "https://mostafa-e-commerce.onrender.com/" + doc.image;
-// });
 
 const categoryModel = mongoose.models.Category || model("Category", categorySchema)
 export default categoryModel

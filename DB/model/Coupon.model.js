@@ -71,7 +71,7 @@ const couponSchema = new Schema({
 
     qrCode: {
         type: String,
-        required: [true, 'qrCode is required'],
+        // required: [true, 'qrCode is required'],
         trim: true,
     },
 

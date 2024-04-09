@@ -12,7 +12,7 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        unique: [true, 'email must be unique value'],
+        // unique: [true, 'email must be unique value'],
         // required: [true, 'email is required'],
         trim: true,
         lower: true
@@ -27,7 +27,7 @@ const userSchema = new Schema({
 
     phoneNumber: {
         type: String,
-        unique: [true, 'phone must be unique value'],
+        // unique: [true, 'phone must be unique value'],
         trim: true,
         lower: true
     },

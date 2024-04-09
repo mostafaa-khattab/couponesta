@@ -10,74 +10,6 @@ import notificationModel from "../../../../DB/model/Notification.model.js";
 import cron from 'node-cron'
 
 
-// export const getCoupons = asyncHandler(async (req, res, next) => {
-
-//     const defaultLocationId = '65f36abdc724e4188406c3b1';
-//     const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')
-
-//     // Get the selected location ID from the user input
-//     const selectedLocationId = req.body.location || defaultLocationId;
-
-//     if (req?.body?.location) {
-//         let loc = await locationModel.findById(req.body.location)
-//         if (!loc) {
-//             return next(new Error(`location not found ${req.body.location}`, { cause: 404 }));
-//         }
-//     }
-
-//     // Find categories matching the selected location or the default location
-//     const coupon = await couponModel.find({
-//         isDeleted: false,
-//         location: { $in: [selectedLocationId || defaultLocationId] }
-
-//     }).lean()
-
-
-//     coupon?.forEach((coup, index) => {
-
-//         coup.status = coup.status[`${locale}`] || `coupons- ${locale}`
-//         coup.description = coup.description[`${locale}`] || `coupons- ${locale}`
-//     })
-
-//     return res.status(200).json({ message: 'succuss', coupon })
-// })
-
-
-// export const getOneCoupon = asyncHandler(async (req, res, next) => {
-
-//     const defaultLocationId = '65f36abdc724e4188406c3b1';
-//     let locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')
-
-//     // Get the selected location ID from the user input
-//     const selectedLocationId = req.body.location || defaultLocationId;
-
-//     if (req?.body?.location) {
-//         let loc = await locationModel.findById(req.body.location)
-//         if (!loc) {
-//             return next(new Error(`Location not found ${req.body.location}`, { cause: 404 }));
-//         }
-//     }
-
-
-//     // Find categories matching the selected location or the default location
-//     const coupon = await couponModel.findOne({
-//         _id: req?.params?.couponId,
-//         isDeleted: false,
-//         location: { $in: [selectedLocationId || defaultLocationId] }
-
-//     }).lean()
-
-//     // If coupon not found in both locations, return 404
-//     if (!coupon) {
-//         return next(new Error(`Coupon not found with ID ${req.params.couponId}`, { status: 404 }));
-//     }
-
-//     coupon.status = coupon.status[`${locale}`] || `coupons- ${locale}`
-//     coupon.description = coupon.description[`${locale}`] || `coupons- ${locale}`
-
-//     return res.status(200).json({ message: "success", coupon });
-// })
-
 export const getCoupons = asyncHandler(async (req, res, next) => {
 
     const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')
@@ -118,7 +50,7 @@ export const createCoupon = asyncHandler(async (req, res, next) => {
     // Extract English and Arabic names and descriptions from request body
     let { brand, category, location, en_description, ar_description, en_status, ar_status } = req.body;
 
-    req.body.qrcode = await QRCode.toDataURL(req.body.code);
+    req.body.qrCode = await QRCode.toDataURL(req.body.code);
 
     const checkCoupon = await couponModel.findOne({ code: req.body.code, isDeleted: false });
     if (checkCoupon) {
@@ -226,7 +158,7 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
     if (req.body.code) {
 
         req.body.code = req.body.code.toLowerCase();
-        req.body.qrcode = await QRCode.toDataURL(req.body.code)
+        req.body.qrCode = await QRCode.toDataURL(req.body.code)
 
         if (req.body.code == coupon.code) {
             return next(new Error(`Cannot update coupon with the same old code`, { cause: 409 }))

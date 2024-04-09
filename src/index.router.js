@@ -28,7 +28,7 @@ const initApp = (app, express) => {
     app.use(`/ads`, adsRouter)
     app.use(`/notification`, notificationRouter)
 
-    app.use('/', (req, res, next) => {
+    app.get('/', (req, res, next) => {
         return res.json({ message: "welcome to coponesta" })
     })
 

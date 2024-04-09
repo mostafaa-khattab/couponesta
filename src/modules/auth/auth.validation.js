@@ -15,8 +15,14 @@ export const signUpValidationPhone = joi.object({
     countryCode: joi.string().required(),
 }).required()
 
-export const loginValidation = joi.object({
+export const loginEmailValidation = joi.object({
     email: generalFields.email,
+    password: generalFields.password,
+}).required()
+
+export const loginPhoneValidation = joi.object({
+    phoneNumber: joi.string().required(),
+    countryCode: joi.string().required(),
     password: generalFields.password,
 }).required()
 

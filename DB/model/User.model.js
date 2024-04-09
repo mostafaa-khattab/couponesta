@@ -99,6 +99,12 @@ const userSchema = new Schema({
         enum: ['male', 'female'],
     },
 
+    provider: {
+        type: String,
+        default: 'system',
+        enum: ['system', 'facebook', 'GOOGLE'],
+    },
+
 }, {
     timestamps: true
 })

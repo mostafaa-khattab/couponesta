@@ -6,6 +6,76 @@ import { asyncHandler } from "../../../utils/errorHandling.js";
 import { sendCodeStyle } from "../../../utils/message.style.js";
 import bcrypt from 'bcrypt'
 import { validatePhoneNumber } from "../../../utils/validatePhone.js";
+import { OAuth2Client } from 'google-auth-library';
+import { customAlphabet } from "nanoid";
+
+
+export const loginWithGmail = asyncHandler(async (req, res, next) => {
+
+    const { idToken } = req.body
+
+    const client = new OAuth2Client("107777812891-7prd8sc7fb40262em7bq48suftm4oibc.apps.googleusercontent.com");
+    async function verify() {
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: "107777812891-7prd8sc7fb40262em7bq48suftm4oibc.apps.googleusercontent.com",  // Specify the CLIENT_ID of the app that accesses the backend
+            // Or, if multiple clients access the backend:
+            //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+        });
+        const payload = ticket.getPayload();
+        const userid = payload['sub'];
+        // If request specified a G Suite domain:
+        // const domain = payload['hd'];
+        return payload;
+    }
+    let payload = await verify()
+
+    if (!payload.email_verified) {
+        return next(new Error("Rejected Email", { cause: 400 }));
+
+    }
+
+    const user = await userModel.findOne({ email: payload.email.toLocaleLowerCase() });
+    if (user) {
+        // login user
+        if (user.provider != "GOOGLE") {
+            return next(new Error("In-valid provider", { cause: 400 }));
+
+        }
+
+        const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
+        const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+
+        user.status = "online"
+        await user.save()
+
+        return res.status(201).json({ message: "success", type: "login", access_token, refresh_token })
+
+    }
+    // sign Up user
+
+    // hash password
+    const customPassword = customAlphabet("dffdsfsdfsgfdgfdvfdvdfgvsdvsdfsd1234567810000", 9)
+    const hashPassword = hash({ plaintext: customPassword })
+
+    // save
+    const newUser = await userModel.create({
+        fullName: payload.given_name + " " + payload.family_name,
+        image: payload.profile,
+        email: payload.email,
+        password: hashPassword,
+        joined: Date.now(),
+        provider: "GOOGLE",
+        status: "online",
+        confirmAccount: true
+    })
+
+    const access_token = generateToken({ payload: { id: newUser._id, role: newUser.role, fullName: newUser.fullName }, expiresIn: 30 * 60 }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: newUser._id, role: newUser.role, fullName: newUser.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+
+    return res.status(201).json({ message: "success", type: "signUp", access_token, refresh_token })
+
+})
 
 
 export const signupEmail = asyncHandler(async (req, res, next) => {
@@ -179,6 +249,7 @@ export const signupPhone = asyncHandler(async (req, res, next) => {
         countryCode,
         password: hashPassword,
         joined: Date.now(),
+        confirmAccount: true
     })
 
     return res.status(201).json({ message: "success", user })
@@ -366,6 +437,35 @@ export const loginEmail = asyncHandler(async (req, res, next) => {
 
     if (!user.confirmAccount) {
         return next(new Error("Please confirm your email", { cause: 400 }));
+    }
+
+    if (!comparePassword({ plaintext: password, hashValue: user.password })) {
+        return next(new Error("In-valid login date", { cause: 400 }));
+    }
+
+    const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+
+    user.status = "online"
+    await user.save()
+
+    return res.status(201).json({ message: "success", access_token, refresh_token })
+
+})
+
+export const loginPhone = asyncHandler(async (req, res, next) => {
+
+    const { phoneNumber, countryCode, password } = req.body
+
+    // check phoneNumber exist
+    let user = await userModel.findOne({ phoneNumber: phoneNumber.toLowerCase() })
+    if (!user) {
+        return next(new Error("phone number not exist", { cause: 404 }));
+    }
+
+    const isValidPhoneNumber = validatePhoneNumber(phoneNumber, countryCode);
+    if (!isValidPhoneNumber) {
+        return next(new Error("Invalid phone number", { cause: 400 }));
     }
 
     if (!comparePassword({ plaintext: password, hashValue: user.password })) {

@@ -515,8 +515,8 @@ export const sendEmailToChangePassword = asyncHandler(async (req, res, next) => 
     user && res.status(202).json({ message: " success" })
 })
 
-// forgot password
-export const forgetPassword = asyncHandler(async (req, res, next) => {
+// forgot password Email
+export const forgetPasswordEmail = asyncHandler(async (req, res, next) => {
 
     const { email, password } = req.body
 
@@ -533,6 +533,33 @@ export const forgetPassword = asyncHandler(async (req, res, next) => {
     const hashPassword = hash({ plaintext: password })
 
     user = await userModel.findOneAndUpdate({ email: email.toLowerCase() }, { password: hashPassword, changePasswordTime: Date.now() }, { new: true })
+
+    user && res.status(202).json({ message: " success", user })
+
+})
+
+// forgot password phone
+export const forgetPasswordPhone = asyncHandler(async (req, res, next) => {
+
+    const { phoneNumber, countryCode, password } = req.body
+
+    let user = await userModel.findOne({ phoneNumber: phoneNumber.toLowerCase() })
+    if (!user) {
+        return next(new Error(`Not register account`, { cause: 404 }))
+    }
+
+    const isValidPhoneNumber = validatePhoneNumber(phoneNumber, countryCode);
+    if (!isValidPhoneNumber) {
+        return next(new Error("Invalid phone number", { cause: 400 }));
+    }
+
+    if (bcrypt.compareSync(password, user.password)) {
+        return next(new Error("Please ensure that your new password is different from your old password for security reasons", { cause: 404 }))
+    }
+
+    const hashPassword = hash({ plaintext: password })
+
+    user = await userModel.findOneAndUpdate({ phoneNumber: phoneNumber.toLowerCase() }, { password: hashPassword, changePasswordTime: Date.now() }, { new: true })
 
     user && res.status(202).json({ message: " success", user })
 

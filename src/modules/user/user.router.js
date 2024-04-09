@@ -42,6 +42,11 @@ router.delete('/softDelete/:userId',
     validation(validators.softDeleteUserValidation),
     userController.softDeleteUser)
 
+router.delete('/logout/:userId',
+    auth([roles.Admin, roles.User]),
+    validation(validators.softDeleteUserValidation),
+    userController.logoutUser)
+
 router.delete('/:userId',
     auth([roles.Admin]),
     validation(validators.deleteUserValidation),

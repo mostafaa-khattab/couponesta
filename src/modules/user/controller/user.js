@@ -446,6 +446,15 @@ export const softDeleteUser = asyncHandler(async (req, res, next) => {
     user && res.status(202).json({ message: " success", user })
 })
 
+export const logoutUser = asyncHandler(async (req, res, next) => {
+    const { userId } = req.params;
+
+    const user = await userModel.findByIdAndUpdate(userId, { status: "offline" })
+
+    !user && next(new Error(`user not found`, { status: 404 }));
+
+    user && res.status(202).json({ message: " success", user })
+})
 
 export const deleteUser = asyncHandler(async (req, res, next) => {
     const { userId } = req.params;

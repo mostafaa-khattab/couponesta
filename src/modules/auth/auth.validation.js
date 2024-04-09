@@ -35,8 +35,17 @@ export const sendEmailToChangePasswordValidation = joi.object({
     email: generalFields.email,
 }).required()
 
-export const forgetPasswordValidation = joi.object({
+export const forgetPasswordEmailValidation = joi.object({
     email: generalFields.email,
+    password: generalFields.password,
+    cPassword: joi.string().valid(joi.ref('password')).required().messages({
+        'any.only': 'Repeat confirm password must match new password',
+    }),
+}).required()
+
+export const forgetPasswordPhoneValidation = joi.object({
+    phoneNumber: joi.string().required(),
+    countryCode: joi.string().required(),
     password: generalFields.password,
     cPassword: joi.string().valid(joi.ref('password')).required().messages({
         'any.only': 'Repeat confirm password must match new password',

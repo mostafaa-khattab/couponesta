@@ -6,7 +6,8 @@ import * as validators from './auth.validation.js';
 const router = Router()
 
 
-router.post("/loginWithGmail", authController.loginWithGmail)
+router.post("/loginWithGmail",
+    authController.loginWithGmail)
 
 router.post('/signupEmail',
     validation(validators.signUpValidationEmail),
@@ -36,9 +37,13 @@ router.post('/requestChangePassword',
     validation(validators.sendEmailToChangePasswordValidation),
     authController.sendEmailToChangePassword)
 
-router.post('/forgetPassword',
-    validation(validators.forgetPasswordValidation),
-    authController.forgetPassword)
+router.post('/forgetPasswordEmail',
+    validation(validators.forgetPasswordEmailValidation),
+    authController.forgetPasswordEmail)
+
+router.post('/forgetPasswordPhone',
+    validation(validators.forgetPasswordPhoneValidation),
+    authController.forgetPasswordPhone)
 
 
 export default router

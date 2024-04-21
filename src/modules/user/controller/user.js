@@ -47,7 +47,12 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
     // Find brand matching the selected location or the default location
     const apiFeature = new ApiFeatures(userModel.find({
         isDeleted: false,
-    }).lean(), req.query)
+    }).lean()
+        .populate('follow', 'name slug link')
+        .populate('createdBy', 'fullName')
+        .populate('updatedBy', 'fullName')
+        .populate('favorite')
+        .populate('notification', 'header body'), req.query)
         .paginate()
         .filter()
         .sort()
@@ -505,7 +510,7 @@ export const getUsersDeleted = asyncHandler(async (req, res, next) => {
         }
     });
 
-    return res.status(200).json({ message: 'succuss', user})
+    return res.status(200).json({ message: 'succuss', user })
 })
 
 

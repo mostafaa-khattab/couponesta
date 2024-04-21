@@ -74,6 +74,12 @@ const categorySchema = new Schema({
     timestamps: true,
 })
 
+categorySchema.pre(/^find/, function () {
+
+    this.populate('createdBy', 'fullName')
+        .populate('updatedBy', 'fullName')
+        .populate('location', 'name locationCode')
+})
 
 const categoryModel = mongoose.models.Category || model("Category", categorySchema)
 export default categoryModel

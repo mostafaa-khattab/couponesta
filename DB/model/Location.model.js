@@ -31,7 +31,7 @@ const locationSchema = new Schema({
         type: Types.ObjectId,
         ref: 'User',
     },
-    
+
     isDeleted: {
         type: Boolean,
         default: false
@@ -41,5 +41,14 @@ const locationSchema = new Schema({
     timestamps: true,
 })
 
+locationSchema.pre(/^find/, function () {
+
+    this.populate('createdBy', 'fullName')
+        .populate('updatedBy', 'fullName')
+})
+
+
 const locationModel = mongoose.models.Location || model("Location", locationSchema)
+
+
 export default locationModel

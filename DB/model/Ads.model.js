@@ -23,12 +23,12 @@ const adsSchema = new Schema({
         type: Types.ObjectId,
         ref: 'User',
         required: true
-    },  
+    },
 
     updatedBy: {
         type: Types.ObjectId,
         ref: 'User',
-    },  
+    },
 
     location: [
         {
@@ -46,6 +46,12 @@ const adsSchema = new Schema({
     timestamps: true,
 })
 
+adsSchema.pre(/^find/, function () {
+
+    this.populate('createdBy', 'fullName')
+        .populate('updatedBy', 'fullName')
+        .populate('location' , 'name locationCode')
+})
 
 const adsModel = mongoose.models.Ads || model("Ads", adsSchema)
 export default adsModel

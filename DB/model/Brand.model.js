@@ -57,7 +57,7 @@ const brandSchema = new Schema({
         type: Types.ObjectId,
         ref: 'User',
     },
-    
+
     location: [
         {
             type: Types.ObjectId,
@@ -73,6 +73,14 @@ const brandSchema = new Schema({
 
 }, {
     timestamps: true,
+})
+
+brandSchema.pre(/^find/, function () {
+
+    this.populate('createdBy', 'fullName')
+        .populate('updatedBy', 'fullName')
+        .populate('location', 'name locationCode')
+        .populate('category', 'name slug ')
 })
 
 const brandModel = mongoose.models.Brand || model("Brand", brandSchema)

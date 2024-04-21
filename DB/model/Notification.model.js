@@ -61,11 +61,18 @@ const notificationSchema = new Schema({
         default: false
     },
 
-    
+
 }, {
     timestamps: true,
 })
 
+notificationSchema.pre(/^find/, function () {
+
+    this.populate('createdBy', 'fullName')
+        .populate('updatedBy', 'fullName')
+        .populate('user' , 'fullName email phone status')
+
+})
 
 const notificationModel = mongoose.models.Notification || model("Notification", notificationSchema)
 export default notificationModel

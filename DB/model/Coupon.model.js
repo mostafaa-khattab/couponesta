@@ -90,5 +90,15 @@ const couponSchema = new Schema({
     timestamps: true,
 })
 
+couponSchema.pre(/^find/, function () {
+
+    this.populate('createdBy', 'fullName')
+        .populate('updatedBy', 'fullName')
+        .populate('location', 'name locationCode')
+        .populate('category', 'name slug ')
+        .populate('brand' , 'name slug link')
+        
+})
+
 const couponModel = mongoose.models.Coupon || model("Coupon", couponSchema)
 export default couponModel

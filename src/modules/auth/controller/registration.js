@@ -70,8 +70,8 @@ export const loginWithGmail = asyncHandler(async (req, res, next) => {
         confirmAccount: true
     })
 
-    const access_token = generateToken({ payload: { id: newUser._id, role: newUser.role, fullName: newUser.fullName }, expiresIn: 30 * 60 }) // 30 minutes
-    const refresh_token = generateToken({ payload: { id: newUser._id, role: newUser.role, fullName: newUser.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+    const access_token = generateToken({ payload: { id: newUser._id, email: newUser.email, role: newUser.role, fullName: newUser.fullName }, expiresIn: 30 * 60 }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: newUser._id, email: newUser.email, role: newUser.role, fullName: newUser.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
 
     return res.status(201).json({ message: "success", type: "signUp", access_token, refresh_token })
 
@@ -443,8 +443,8 @@ export const loginEmail = asyncHandler(async (req, res, next) => {
         return next(new Error("In-valid login date", { cause: 400 }));
     }
 
-    const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
-    const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+    const access_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
 
     user.status = "online"
     await user.save()
@@ -472,8 +472,8 @@ export const loginPhone = asyncHandler(async (req, res, next) => {
         return next(new Error("In-valid login date", { cause: 400 }));
     }
 
-    const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
-    const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+    const access_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
 
     user.status = "online"
     await user.save()

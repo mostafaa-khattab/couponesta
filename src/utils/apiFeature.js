@@ -49,6 +49,7 @@ export default class ApiFeatures {
 
             this.mongooseQuery.find({
                 $or: [
+                    { name: { $regex: this.queryData.search, $options: 'i' } },
                     { 'name.en': { $regex: this.queryData.search, $options: 'i' } },
                     { 'name.ar': { $regex: this.queryData.search, $options: 'i' } },
                     { 'slug.en': { $regex: this.queryData.search, $options: 'i' } },

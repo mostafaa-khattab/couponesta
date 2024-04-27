@@ -9,6 +9,34 @@ import ApiFeatures from "../../../utils/apiFeature.js";
 import cron from 'node-cron'
 
 
+export const getAllBrandsToDashboard = asyncHandler(async (req, res, next) => {
+
+    // Find brand matching the selected location or the default location
+    const apiFeature = new ApiFeatures(brandModel.find({
+        isDeleted: false,
+    }), req.query)
+        .paginate()
+        .filter()
+        .sort()
+        .search()
+        .select()
+
+
+    const brand = await apiFeature.mongooseQuery
+
+    brand?.forEach((elm, index) => {
+        // Check if image exists and update its URL
+        if (elm.image) {
+            brand[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+        }
+
+    });
+
+
+    return res.status(200).json({ message: 'succuss', brand })
+})
+
+
 export const getBrands = asyncHandler(async (req, res, next) => {
 
     const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')

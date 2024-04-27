@@ -9,6 +9,27 @@ import bcrypt from 'bcrypt'
 import cron from 'node-cron'
 
 
+export const getAllUserFavoriteToDashboard = asyncHandler(async (req, res, next) => {
+
+    const userFavorite = await userModel.findOne(req.user._id).populate('favorite').lean()
+
+    !userFavorite && next(new AppError(`user favorite not found`, 404))
+    userFavorite && res.status(202).json({ message: " success", userFavorite: userFavorite.favorite })
+})
+
+export const getAllUserFollowToDashboard = asyncHandler(async (req, res, next) => {
+
+    const userFollow = await userModel.findOne(req.user._id).populate('follow').lean()
+
+    userFollow.follow?.forEach((coup, index) => {
+
+        userFollow.follow[index].image = "https://mostafa-e-commerce.onrender.com/" + coup.image
+    })
+
+    !userFollow && next(new AppError(`user follow not found`, 404))
+    userFollow && res.status(202).json({ message: " success", userFollow: userFollow.follow })
+})
+
 export const getAllUserFavorite = asyncHandler(async (req, res, next) => {
 
     const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')

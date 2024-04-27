@@ -7,6 +7,14 @@ import { fileUpload, fileValidation } from "../../utils/multer.js";
 const router = Router()
 
 
+router.get('/favorite/toDashboard',
+    auth([roles.User, roles.Admin]),
+    userController.getAllUserFavoriteToDashboard)
+
+router.get('/follow/toDashboard',
+    auth([roles.User, roles.Admin]),
+    userController.getAllUserFollowToDashboard)
+
 router.get('/favorite/:locale?',
     auth([roles.User, roles.Admin]),
     userController.getAllUserFavorite)

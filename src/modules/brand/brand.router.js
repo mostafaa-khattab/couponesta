@@ -6,6 +6,9 @@ import * as brandController from './controller/brand.js';
 import { Router } from "express";
 const router = Router()
 
+router.get('/toDashboard',
+    brandController.getAllBrandsToDashboard)
+
 router.get('/:locale?',
     // validation(validators.getAllBrandValidation),
     brandController.getBrands)

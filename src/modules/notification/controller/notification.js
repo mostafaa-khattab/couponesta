@@ -4,6 +4,44 @@ import ApiFeatures from "../../../utils/apiFeature.js";
 import { asyncHandler } from "../../../utils/errorHandling.js";
 import cron from 'node-cron'
 
+export const getNotificationsToDashboard = asyncHandler(async (req, res, next) => {
+
+    const apiFeature = new ApiFeatures(notificationModel.find({
+        isDeleted: false,
+        // user: req.user._id
+    }), req.query)
+        .paginate()
+        .filter()
+        .sort()
+        .search()
+        .select()
+
+
+    const notification = await apiFeature.mongooseQuery
+
+    return res.status(200).json({ message: 'succuss', notification })
+
+})
+
+export const getSpacialNotificationToDashboard = asyncHandler(async (req, res, next) => {
+
+    const apiFeature = new ApiFeatures(notificationModel.find({
+        isDeleted: false,
+        user: req.user._id
+    }), req.query)
+        .paginate()
+        .filter()
+        .sort()
+        .search()
+        .select()
+
+
+    const notification = await apiFeature.mongooseQuery
+
+    return res.status(200).json({ message: 'succuss', notification })
+
+})
+
 export const getNotifications = asyncHandler(async (req, res, next) => {
 
     const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')

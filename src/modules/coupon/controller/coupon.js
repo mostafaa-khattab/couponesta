@@ -10,6 +10,25 @@ import notificationModel from "../../../../DB/model/Notification.model.js";
 import cron from 'node-cron'
 
 
+export const getAllCouponsToDashboard = asyncHandler(async (req, res, next) => {
+
+    // Find coupon matching the selected location or the default location
+    const apiFeature = new ApiFeatures(couponModel.find({
+        isDeleted: false,
+    }), req.query)
+        .paginate()
+        .filter()
+        .sort()
+        .search()
+        .select()
+
+
+    const coupon = await apiFeature.mongooseQuery
+
+    return res.status(200).json({ message: 'succuss', coupon })
+})
+
+
 export const getCoupons = asyncHandler(async (req, res, next) => {
 
     const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')

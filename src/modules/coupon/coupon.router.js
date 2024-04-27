@@ -5,6 +5,9 @@ import { Router } from "express";
 import { auth, roles } from '../../middleware/auth.js';
 const router = Router()
 
+// get all coupons
+router.get('/toDashboard',
+    couponController.getAllCouponsToDashboard)
 
 router.get('/:locale?',
     // validation(validators.getAllCouponValidation),

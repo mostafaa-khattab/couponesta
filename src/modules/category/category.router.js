@@ -7,6 +7,10 @@ import { Router } from "express";
 const router = Router()
 
 // get all categories
+router.get('/toDashboard',
+    categoryController.getAllCategoriesToDashboard)
+
+// get all categories
 router.get('/:locale?',
     // validation(validators.getAllCategoryValidation),
     categoryController.getCategories)
@@ -18,7 +22,7 @@ router.post('/',
     validation(validators.createCategoryValidation),
     categoryController.createCategory)
 
-    
+
 router.put('/:categoryId',
     auth([roles.Admin]),
     fileUpload('category', fileValidation.image).single('image'),

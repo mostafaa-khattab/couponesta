@@ -6,6 +6,31 @@ import { asyncHandler } from "../../../utils/errorHandling.js";
 import ApiFeatures from "../../../utils/apiFeature.js";
 import cron from 'node-cron'
 
+export const getAllCategoriesToDashboard = asyncHandler(async (req, res, next) => {
+
+    // Find brand matching the selected location or the default location
+    const apiFeature = new ApiFeatures(categoryModel.find({
+        isDeleted: false,
+    }), req.query)
+        .paginate()
+        .filter()
+        .sort()
+        .search()
+        .select()
+
+
+    const category = await apiFeature.mongooseQuery
+
+    category?.forEach((elm, index) => {
+        // Check if image exists and update its URL
+        if (elm.image) {
+            category[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+        }
+    });
+
+    return res.status(200).json({ message: 'succuss', category })
+})
+
 
 export const getCategories = asyncHandler(async (req, res, next) => {
 

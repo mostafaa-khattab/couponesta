@@ -6,6 +6,15 @@ import * as notificationController from "./controller/notification.js";
 
 const router = Router()
 
+
+router.get('/all/toDashboard',
+    auth([roles.Admin]),
+    notificationController.getNotificationsToDashboard)
+
+router.get('/toDashboard',
+    auth([roles.Admin, roles.User]),
+    notificationController.getSpacialNotificationToDashboard)
+
 router.get('/all/:locale?',
     auth([roles.Admin]),
     notificationController.getNotifications)

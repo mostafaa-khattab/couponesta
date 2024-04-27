@@ -27,7 +27,7 @@ export const getAds = asyncHandler(async (req, res, next) => {
             ads[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
         }
 
-});
+    });
 
 
     return res.status(200).json({ message: 'succuss', ads })
@@ -119,33 +119,28 @@ export const updateAds = asyncHandler(async (req, res, next) => {
     }
 
 
-    // Check each location ID in the array
-    if (req.body.location) {
-        // Check if req.body.location is an array
-        if (!Array.isArray(req.body.location)) {
-            // Convert to array if it's not already
-            req.body.location = [req.body.location];
-        }
+    let location = req.body.location
 
-        for (const locationId of req.body.location) {
-            // Check if the ID already exists in the array
-            if (ads.location.includes(locationId)) {
-                return next(new Error(`location ID already exists ${locationId}. Choose another location.`, { status: 409 }));
-            }
+    // Update location if provided
+    if (location) {
+        const newLocations = Array.isArray(location) ? location : [location];
 
-            // Check if the ID exists in the database
+        for (const locationId of newLocations) {
             const checkLocation = await locationModel.findById(locationId);
             if (!checkLocation) {
-                return next(new Error(`Not found this location ID ${locationId}`, { status: 404 }));
+                return res.status(404).json({ error: `Not found this location ID ${locationId}` });
             }
-
         }
 
-        ads.location.push(req.body.location);
+        // Use $addToSet to add locations without duplication
+        await adsModel.findByIdAndUpdate(adsId, { $addToSet: { location: { $each: newLocations } } });
 
-        req.body.location = ads.location
+        // Fetch the updated brand
+        ads = await adsModel.findById(adsId);
+        req.body.location = ads.location;
     }
 
+    
     req.body.updatedBy = req.user._id
 
     ads = await adsModel.findByIdAndUpdate(adsId, req.body, { new: true });

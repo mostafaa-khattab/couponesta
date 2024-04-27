@@ -6,14 +6,14 @@ const brandSchema = new Schema({
     name: {
         en: {
             type: String,
-            required: [true, 'English name is required'],
-            unique: [true, 'English name must be unique'],
+            // required: [true, 'English name is required'],
+            // unique: [true, 'English name must be unique'],
             trim: true
         },
         ar: {
             type: String,
-            required: [true, 'Arabic name is required'],
-            unique: [true, 'Arabic name must be unique'],
+            // required: [true, 'Arabic name is required'],
+            // unique: [true, 'Arabic name must be unique'],
             trim: true
         }
     },

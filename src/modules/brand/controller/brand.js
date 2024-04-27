@@ -195,15 +195,18 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
         req.body.slug = slugify(newEnName);
     }
 
+    if (en_description || ar_description) {
+        let newEnDesc = en_description ? en_description.toLowerCase() : brand.description.en;
+        let newArDesc = ar_description ? ar_description.toLowerCase() : brand.description.ar;
 
-    if (ar_description || en_description) {
-        let newEnDesc = ar_description ? ar_description.toLowerCase() : brand.description.en;
-        let newArDesc = en_description ? en_description.toLowerCase() : brand.description.ar;
-
-        brand.description.en = newEnDesc
-        brand.description.ar = newArDesc
-
+        // Update brand descriptions
+        brand.description.en = newEnDesc;
+        brand.description.ar = newArDesc;
     }
+
+    // Save the changes
+    await brand.save();
+
 
     // Update image if provided
     if (req.file) {
@@ -216,22 +219,6 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
         req.body.image = req.file.dest;
     }
 
-    // // Update location if provided
-    // if (location) {
-    //     const newLocations = Array.isArray(location) ? location : [location];
-    //     for (const locationId of newLocations) {
-    //         if (brand.location.includes(locationId)) {
-    //             return res.status(409).json({ error: `Location ID already exists ${locationId}. Choose another location.` });
-    //         }
-
-    //         const checkLocation = await locationModel.findById(locationId);
-    //         if (!checkLocation) {
-    //             return res.status(404).json({ error: `Not found this location ID ${locationId}` });
-    //         }
-    //     }
-    //     brand.location.push(...newLocations);
-    //     req.body.location = brand.location;
-    // }
 
     // Update location if provided
     if (location) {
@@ -253,12 +240,13 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
     }
 
 
-    // Check each category ID in the array
+    // Update categories if provided
     if (category) {
         const newCategories = Array.isArray(category) ? category : [category];
+
         for (const categoryId of newCategories) {
             if (brand.category.includes(categoryId)) {
-                return res.status(409).json({ error: `category ID already exists ${categoryId}. Choose another category.` });
+                return res.status(409).json({ error: `Category ID already exists ${categoryId}. Choose another category.` });
             }
 
             const checkCategory = await categoryModel.findById(categoryId);
@@ -266,9 +254,15 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
                 return res.status(404).json({ error: `Not found this category ID ${categoryId}` });
             }
         }
-        brand.category.push(...newCategories);
+
+        // Use $addToSet to add categories without duplication
+        await brandModel.findByIdAndUpdate(brandId, { $addToSet: { category: { $each: newCategories } } });
+
+        // Fetch the updated brand
+        brand = await brandModel.findById(brandId);
         req.body.category = brand.category;
     }
+
 
     req.body.updatedBy = req.user._id
 

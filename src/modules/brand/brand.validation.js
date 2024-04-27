@@ -32,11 +32,11 @@ export const createBrandValidation = joi.object({
 export const updateBrandValidation = joi.object({
 
     brandId: generalFields.id,
-    en_name: joi.string().trim().min(1).max(255),
-    ar_name: joi.string().trim().min(1).max(255),
+    en_name: joi.string().trim().allow('').min(1).max(255),
+    ar_name: joi.string().trim().allow('').min(1).max(255),
     en_description: joi.string().trim().allow('').max(1000), // Optional
     ar_description: joi.string().trim().allow('').max(1000),
-    link: joi.string().min(1).max(200).custom(validateURL),
+    link: joi.string().min(1).max(200).allow('').custom(validateURL),
     image: generalFields.file,
     category: joi.alternatives().try(
         generalFields.idUpdate, // Single ID

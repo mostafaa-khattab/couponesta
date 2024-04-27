@@ -199,26 +199,30 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
     // Update location if provided
     if (location) {
         const newLocations = Array.isArray(location) ? location : [location];
-        for (const locationId of newLocations) {
-            if (coupon.location.includes(locationId)) {
-                return res.status(409).json({ error: `Location ID already exists ${locationId}. Choose another location.` });
-            }
 
+        for (const locationId of newLocations) {
             const checkLocation = await locationModel.findById(locationId);
             if (!checkLocation) {
                 return res.status(404).json({ error: `Not found this location ID ${locationId}` });
             }
         }
-        coupon.location.push(...newLocations);
+
+        // Use $addToSet to add locations without duplication
+        await couponModel.findByIdAndUpdate(couponId, { $addToSet: { location: { $each: newLocations } } });
+
+        // Fetch the updated coupon
+        coupon = await couponModel.findById(couponId);
         req.body.location = coupon.location;
     }
 
-    // Check each category ID in the array
+
+    // Update categories if provided
     if (category) {
         const newCategories = Array.isArray(category) ? category : [category];
+
         for (const categoryId of newCategories) {
-            if (coupon.category.includes(categoryId)) {
-                return res.status(409).json({ error: `category ID already exists ${categoryId}. Choose another category.` });
+            if (brand.category.includes(categoryId)) {
+                return res.status(409).json({ error: `Category ID already exists ${categoryId}. Choose another category.` });
             }
 
             const checkCategory = await categoryModel.findById(categoryId);
@@ -226,16 +230,22 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
                 return res.status(404).json({ error: `Not found this category ID ${categoryId}` });
             }
         }
-        coupon.category.push(...newCategories);
+
+        // Use $addToSet to add categories without duplication
+        await coupon.findByIdAndUpdate(couponId, { $addToSet: { category: { $each: newCategories } } });
+
+        // Fetch the updated coupon
+        coupon = await coupon.findById(couponId);
         req.body.category = coupon.category;
     }
 
-    // Check each brand ID in the array
+    // Update brands if provided
     if (brand) {
-        const newBrand = Array.isArray(brand) ? brand : [brand];
-        for (const brandId of newBrand) {
+        const newBrands = Array.isArray(brand) ? brand : [brand];
+
+        for (const brandId of newBrands) {
             if (coupon.brand.includes(brandId)) {
-                return res.status(409).json({ error: `brand ID already exists ${brandId}. Choose another brand.` });
+                return res.status(409).json({ error: `Brand ID already exists ${brandId}. Choose another brand.` });
             }
 
             const checkBrand = await brandModel.findById(brandId);
@@ -244,10 +254,15 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
             }
         }
 
-        coupon.brand.push(...newBrand);
+        // Use $addToSet to add brands without duplication
+        await couponModel.findByIdAndUpdate(couponId, { $addToSet: { brand: { $each: newBrands } } });
+
+        // Fetch the updated coupon
+        coupon = await couponModel.findById(couponId);
         req.body.brand = coupon.brand;
     }
 
+    
     req.body.updatedBy = req.user._id
 
     coupon = await coupon.save();

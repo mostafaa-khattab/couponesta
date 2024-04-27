@@ -140,6 +140,103 @@ export const createCategory = asyncHandler(async (req, res, next) => {
 })
 
 
+// export const updateCategory = asyncHandler(async (req, res, next) => {
+//     const { categoryId } = req.params;
+
+//     let category = await categoryModel.findById(categoryId);
+
+//     if (!category) {
+//         return res.status(400).json({ error: 'Invalid category ID' });
+//     }
+
+//     let { en_name, ar_name, location, ar_description, en_description } = req.body;
+
+//     // Update names and slug if provided
+//     if (en_name || ar_name) {
+//         // Convert to lowercase and handle empty/null values
+//         let newEnName = en_name ? en_name?.toLowerCase() : category?.name?.en;
+//         let newArName = ar_name ? ar_name?.toLowerCase() : category?.name?.ar;
+
+//         // Check for duplicates
+//         const checkEnName = await categoryModel.findOne({ 'name.en': newEnName });
+//         const checkArName = await categoryModel.findOne({ 'name.ar': newArName });
+
+//         if (checkEnName && en_name) {
+//             return res.status(409).json({ error: `Duplicate English category name ${newEnName}` });
+//         }
+
+//         if (checkArName && ar_name) {
+//             return res.status(409).json({ error: `Duplicate Arabic category name ${newArName}` });
+//         }
+
+//         console.log(newEnName);
+//         console.log(category.name.en);
+
+
+//         // Update category names
+//         category.name.en = newEnName;
+//         category.name.ar = newArName;
+
+//         // Update the slug based on the English name
+//         req.body.slug.en = slugify(newEnName);
+//         req.body.slug.ar = slugify(newArName);
+//     }
+
+
+//     if (ar_description || en_description) {
+//         let newEnDesc = ar_description ? ar_description.toLowerCase() : category.description.en;
+//         let newArDesc = en_description ? en_description.toLowerCase() : category.description.ar;
+
+//         category.description.en = newEnDesc
+//         category.description.ar = newArDesc
+
+//     }
+
+//     // Update image if provided
+//     if (req.file) {
+//         fs.unlinkSync(category.image, (err) => {
+//             if (err) {
+//                 // console.error("Error deleting previous image:", err);
+//             }
+//         });
+//         req.body.image = req.file.dest;
+//     }
+
+//     // Update location if provided
+//     if (location) {
+//         const newLocations = Array.isArray(location) ? location : [location];
+//         for (const locationId of newLocations) {
+//             if (category.location.includes(locationId)) {
+//                 return res.status(409).json({ error: `Location ID already exists ${locationId}. Choose another location.` });
+//             }
+
+//             const checkLocation = await locationModel.findById(locationId);
+//             if (!checkLocation) {
+//                 return res.status(404).json({ error: `Not found this location ID ${locationId}` });
+//             }
+//         }
+//         category.location.push(...newLocations);
+//         req.body.location = category.location;
+//     }
+
+//     // Update updatedBy field
+//     req.body.updatedBy = req.user._id;
+
+//     category = await category.save();
+
+//     // Save updated category
+//     category = await categoryModel.findByIdAndUpdate(categoryId, req.body, { new: true });
+
+//     // Append BASE_URL to the image field
+//     if (category.image) {
+//         category.image = "https://mostafa-e-commerce.onrender.com/" + category.image;
+//     }
+
+
+//     return res.status(200).json({ message: 'success', category });
+
+// });
+
 export const updateCategory = asyncHandler(async (req, res, next) => {
     const { categoryId } = req.params;
 
@@ -153,11 +250,9 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
 
     // Update names and slug if provided
     if (en_name || ar_name) {
-        // Convert to lowercase and handle empty/null values
-        let newEnName = en_name ? en_name.toLowerCase() : category.name.en;
-        let newArName = ar_name ? ar_name.toLowerCase() : category.name.ar;
+        let newEnName = en_name ? en_name.toLowerCase() : category.name?.en;
+        let newArName = ar_name ? ar_name.toLowerCase() : category.name?.ar;
 
-        // Check for duplicates
         const checkEnName = await categoryModel.findOne({ 'name.en': newEnName });
         const checkArName = await categoryModel.findOne({ 'name.ar': newArName });
 
@@ -169,32 +264,40 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
             return res.status(409).json({ error: `Duplicate Arabic category name ${newArName}` });
         }
 
-        // Update category names
+        // Initialize category.name if it's undefined
+        category.name = category.name || {};
         category.name.en = newEnName;
         category.name.ar = newArName;
 
-        // Update the slug based on the English name
+        // Initialize req.body.slug if it's undefined
+        req.body.slug = req.body.slug || {};
         req.body.slug.en = slugify(newEnName);
         req.body.slug.ar = slugify(newArName);
+
+        category.save()
     }
 
-
     if (ar_description || en_description) {
-        let newEnDesc = ar_description ? ar_description.toLowerCase() : category.description.en;
-        let newArDesc = en_description ? en_description.toLowerCase() : category.description.ar;
+        let newEnDesc = en_description ? en_description.toLowerCase() : category.description?.en;
+        let newArDesc = ar_description ? ar_description.toLowerCase() : category.description?.ar;
 
-        category.description.en = newEnDesc
-        category.description.ar = newArDesc
+        // Initialize category.description if it's undefined
+        category.description = category.description || {};
+        category.description.en = newEnDesc;
+        category.description.ar = newArDesc;
 
+        category.save()
     }
 
     // Update image if provided
     if (req.file) {
-        fs.unlinkSync(category.image, (err) => {
-            if (err) {
-                // console.error("Error deleting previous image:", err);
-            }
-        });
+        if (category.image) {
+            fs.unlinkSync(category.image, (err) => {
+                if (err) {
+                    // console.error("Error deleting previous image:", err);
+                }
+            });
+        }
         req.body.image = req.file.dest;
     }
 
@@ -218,8 +321,6 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
     // Update updatedBy field
     req.body.updatedBy = req.user._id;
 
-    category = await category.save();
-
     // Save updated category
     category = await categoryModel.findByIdAndUpdate(categoryId, req.body, { new: true });
 
@@ -228,10 +329,9 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
         category.image = "https://mostafa-e-commerce.onrender.com/" + category.image;
     }
 
-
     return res.status(200).json({ message: 'success', category });
-
 });
+
 
 
 export const deleteCategory = asyncHandler(async (req, res, next) => {

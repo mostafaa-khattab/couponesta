@@ -17,8 +17,8 @@ export const createCategoryValidation = joi.object({
 export const updateCategoryValidation = joi.object({
 
     categoryId: generalFields.id,
-    en_name: joi.string().trim().min(1).max(255),
-    ar_name: joi.string().trim().min(1).max(255),
+    en_name: joi.string().trim().allow('').min(1).max(255),
+    ar_name: joi.string().trim().allow('').min(1).max(255),
     en_description: joi.string().trim().allow('').max(1000), // Optional
     ar_description: joi.string().trim().allow('').max(1000),
     image: generalFields.file,
@@ -26,10 +26,11 @@ export const updateCategoryValidation = joi.object({
         generalFields.idUpdate, // Single ID
         generalFields.idArrayUpdate // Array of IDs
     ),
-    icon: joi.string(),
+    icon: joi.string().allow(''),
     isDeleted: joi.boolean(),
 
 }).required()
+
 
 export const deleteCategoryValidation = joi.object({
 

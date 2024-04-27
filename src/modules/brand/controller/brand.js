@@ -216,20 +216,39 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
         req.body.image = req.file.dest;
     }
 
+    // // Update location if provided
+    // if (location) {
+    //     const newLocations = Array.isArray(location) ? location : [location];
+    //     for (const locationId of newLocations) {
+    //         if (brand.location.includes(locationId)) {
+    //             return res.status(409).json({ error: `Location ID already exists ${locationId}. Choose another location.` });
+    //         }
+
+    //         const checkLocation = await locationModel.findById(locationId);
+    //         if (!checkLocation) {
+    //             return res.status(404).json({ error: `Not found this location ID ${locationId}` });
+    //         }
+    //     }
+    //     brand.location.push(...newLocations);
+    //     req.body.location = brand.location;
+    // }
+
     // Update location if provided
     if (location) {
         const newLocations = Array.isArray(location) ? location : [location];
-        for (const locationId of newLocations) {
-            if (brand.location.includes(locationId)) {
-                return res.status(409).json({ error: `Location ID already exists ${locationId}. Choose another location.` });
-            }
 
+        for (const locationId of newLocations) {
             const checkLocation = await locationModel.findById(locationId);
             if (!checkLocation) {
                 return res.status(404).json({ error: `Not found this location ID ${locationId}` });
             }
         }
-        brand.location.push(...newLocations);
+
+        // Use $addToSet to add locations without duplication
+        await brandModel.findByIdAndUpdate(brandId, { $addToSet: { location: { $each: newLocations } } });
+
+        // Fetch the updated brand
+        brand = await brandModel.findById(brandId);
         req.body.location = brand.location;
     }
 

@@ -6,14 +6,14 @@ const categorySchema = new Schema({
     name: {
         en: {
             type: String,
-            required: [true, 'English name is required'],
-            unique: [true, 'English name must be unique'],
+            // required: [true, 'English name is required'],
+            // unique: [true, 'English name must be unique'],
             trim: true
         },
         ar: {
             type: String,
-            required: [true, 'Arabic name is required'],
-            unique: [true, 'Arabic name must be unique'],
+            // required: [true, 'Arabic name is required'],
+            // unique: [true, 'Arabic name must be unique'],
             trim: true
         }
     },
@@ -21,14 +21,14 @@ const categorySchema = new Schema({
     slug: {
         en: {
             type: String,
-            required: [true, 'English slug is required'],
-            unique: [true, 'English slug must be unique'],
+            // required: [true, 'English slug is required'],
+            // unique: [true, 'English slug must be unique'],
             trim: true
         },
         ar: {
             type: String,
-            required: [true, 'Arabic slug is required'],
-            unique: [true, 'Arabic slug must be unique'],
+            // required: [true, 'Arabic slug is required'],
+            // unique: [true, 'Arabic slug must be unique'],
             trim: true
         }
     },

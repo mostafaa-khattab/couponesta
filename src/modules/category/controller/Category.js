@@ -304,22 +304,25 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
     // Update location if provided
     if (location) {
         const newLocations = Array.isArray(location) ? location : [location];
-        for (const locationId of newLocations) {
-            if (category.location.includes(locationId)) {
-                return res.status(409).json({ error: `Location ID already exists ${locationId}. Choose another location.` });
-            }
 
+        for (const locationId of newLocations) {
             const checkLocation = await locationModel.findById(locationId);
             if (!checkLocation) {
                 return res.status(404).json({ error: `Not found this location ID ${locationId}` });
             }
         }
-        category.location.push(...newLocations);
+
+        // Use $addToSet to add locations without duplication
+        await categoryModel.findByIdAndUpdate(categoryId, { $addToSet: { location: { $each: newLocations } } });
+
+        // Fetch the updated category
+        category = await categoryModel.findById(categoryId);
         req.body.location = category.location;
     }
 
     // Update updatedBy field
     req.body.updatedBy = req.user._id;
+
 
     // Save updated category
     category = await categoryModel.findByIdAndUpdate(categoryId, req.body, { new: true });

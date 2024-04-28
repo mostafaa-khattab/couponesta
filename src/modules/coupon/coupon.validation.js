@@ -31,28 +31,19 @@ export const createCouponValidation = joi.object({
 export const updateCouponValidation = joi.object({
 
     couponId: generalFields.id,
-    code: joi.string().min(1).max(50),
+    code: joi.string().min(1).max(50).allow(''),
     en_description: joi.string().trim().allow('').max(1000), // Optional
     ar_description: joi.string().trim().allow('').max(1000),
-    en_status: joi.string().valid('discount', 'cashback').default('discount'),
-    ar_status: joi.string().valid('خصم', 'كاش باك').default('خصم'),
-    amount: joi.number().positive().min(1).max(100),
-    expire: joi.date(),
-    usedCount: joi.number().min(0).integer(),
-    likeCount: joi.number().min(0).integer(),
-    dislikeCount: joi.number().min(0).integer(),
-    category: joi.alternatives().try(
-        generalFields.idUpdate, // Single ID
-        generalFields.idArrayUpdate // Array of IDs
-    ),
-    brand: joi.alternatives().try(
-        generalFields.idUpdate, // Single ID
-        generalFields.idArrayUpdate // Array of IDs
-    ),
-    location: joi.alternatives().try(
-        generalFields.idUpdate, // Single ID
-        generalFields.idArrayUpdate // Array of IDs
-    ),
+    en_status: joi.string().valid('discount', 'cashback').default('discount').allow(''),
+    ar_status: joi.string().valid('خصم', 'كاش باك').default('خصم').allow(''),
+    amount: joi.number().positive().min(1).max(100).allow(''),
+    expire: joi.date().allow(''),
+    usedCount: joi.number().min(0).integer().allow(''),
+    likeCount: joi.number().min(0).integer().allow(''),
+    dislikeCount: joi.number().min(0).integer().allow(''),
+    category: joi.array(),
+    brand: joi.array(),
+    location: joi.array(),
     isDeleted: joi.boolean(),
 
 }).required()

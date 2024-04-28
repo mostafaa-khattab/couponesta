@@ -25,7 +25,7 @@ export const createAdsValidation = joi.object({
 export const updateAdsValidation = joi.object({
 
     adsId: generalFields.id,
-    name: joi.string().min(1).max(50),
+    name: joi.string().min(1).max(50).allow(''),
     link: joi.string().min(1).max(200).custom(validateURL),
     image: generalFields.file,
     location: joi.alternatives().try(

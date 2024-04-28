@@ -164,7 +164,7 @@ export const createCoupon = asyncHandler(async (req, res, next) => {
 export const updateCoupon = asyncHandler(async (req, res, next) => {
 
     const { couponId } = req.params;
-    let coupon = await couponModel.findOne({ _id: couponId, isDeleted: false })
+    let coupon = await couponModel.findOne({ _id: couponId })
     if (!coupon) {
         return next(new Error(`In-valid coupon ID`, { cause: 400 }))
     }
@@ -262,7 +262,7 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
         req.body.brand = coupon.brand;
     }
 
-    
+
     req.body.updatedBy = req.user._id
 
     coupon = await coupon.save();

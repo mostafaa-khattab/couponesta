@@ -152,9 +152,10 @@ export const createNotification = asyncHandler(async (req, res, next) => {
 
 export const updateNotification = asyncHandler(async (req, res, next) => {
 
+
     const { notificationId } = req.params;
 
-    let notification = await notificationModel.findOne({ _id: notificationId, isDeleted: false })
+    let notification = await notificationModel.findOne({ _id: notificationId})
     if (!notification) {
         return next(new Error(`In-valid notification ID`, { cause: 400 }))
     }
@@ -180,27 +181,41 @@ export const updateNotification = asyncHandler(async (req, res, next) => {
     // Update user if provided
     if (user) {
         const newUsers = Array.isArray(user) ? user : [user];
-        for (const userId of newUsers) {
-            if (notification.user.includes(userId)) {
-                return res.status(409).json({ error: `user ID already exists ${userId}. Choose another user.` });
-            }
 
+        for (const userId of newUsers) {
             const checkUser = await userModel.findById(userId);
             if (!checkUser) {
                 return res.status(404).json({ error: `Not found this user ID ${userId}` });
             }
         }
-        notification.user.push(...newUsers);
-        req.body.user = notification.user;
+
+        // Check for existing users
+        const existingUsers = await userModel.find({ _id: { $in: newUsers } }, '_id').lean();
+
+        if (existingUsers.length !== newUsers.length) {
+            const existingIds = existingUsers.map(user => user._id);
+            const nonExistingUsers = newUsers.filter(userId => !existingIds.includes(userId));
+
+            return res.status(404).json({ error: `Not found these user IDs: ${nonExistingUsers.join(', ')}` });
+        }
+
+        // Add new user IDs to the notification
+        await notificationModel.findByIdAndUpdate(notificationId, { $each: { user: { $addToSet: newUsers } } });
+
+        // Update req.body.user with the new user IDs
+        req.body.user = newUsers;
+
     }
 
-    req.body.updatedBy = req.user._id
 
-    notification = await notification.save();
 
-    notification = await notificationModel.findByIdAndUpdate(notificationId, req.body, { new: true })
+    req.body.updatedBy = req.user._id;
 
-    return res.status(201).json({ message: 'succuss', notification })
+    // Perform the update without modifying the user field
+    const updatedNotification = await notificationModel.findByIdAndUpdate(notificationId, req.body, { new: true });
+
+    return res.status(201).json({ message: 'Success', notification: updatedNotification });
+
 
 })
 

@@ -21,10 +21,7 @@ export const updateNotificationValidation = joi.object({
     ar_header: joi.string().trim().min(1).max(50000),
     en_body: joi.string().trim().min(1).max(1000000),
     ar_body: joi.string().trim().min(1).max(1000000),
-    user: joi.alternatives().try(
-        generalFields.id, // Single ID
-        generalFields.idArray // Array of IDs
-    ),
+    user: joi.array().min(0).items(joi.string().min(5).label("item").optional()),
     isDeleted: joi.boolean(),
 
 }).required()

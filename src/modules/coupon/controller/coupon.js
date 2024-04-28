@@ -196,72 +196,92 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
         coupon.description.ar = newArDesc
     }
 
-    // Update location if provided
-    if (location) {
-        const newLocations = Array.isArray(location) ? location : [location];
-
-        for (const locationId of newLocations) {
-            const checkLocation = await locationModel.findById(locationId);
-            if (!checkLocation) {
-                return res.status(404).json({ error: `Not found this location ID ${locationId}` });
-            }
-        }
-
-        // Use $addToSet to add locations without duplication
-        await couponModel.findByIdAndUpdate(couponId, { $addToSet: { location: { $each: newLocations } } });
-
-        // Fetch the updated coupon
-        coupon = await couponModel.findById(couponId);
-        req.body.location = coupon.location;
-    }
-
-
-    // Update categories if provided
+    // Update category if provided
     if (category) {
-        const newCategories = Array.isArray(category) ? category : [category];
+        const newCategory = Array.isArray(category) ? category : [category];
 
-        for (const categoryId of newCategories) {
-            if (brand.category.includes(categoryId)) {
-                return res.status(409).json({ error: `Category ID already exists ${categoryId}. Choose another category.` });
-            }
-
+        for (const categoryId of newCategory) {
             const checkCategory = await categoryModel.findById(categoryId);
             if (!checkCategory) {
                 return res.status(404).json({ error: `Not found this category ID ${categoryId}` });
             }
         }
 
-        // Use $addToSet to add categories without duplication
-        await coupon.findByIdAndUpdate(couponId, { $addToSet: { category: { $each: newCategories } } });
+        // Check for existing category
+        const existingCategory = await categoryModel.find({ _id: { $in: newCategory } }, '_id').lean();
 
-        // Fetch the updated coupon
-        coupon = await coupon.findById(couponId);
-        req.body.category = coupon.category;
+        if (existingCategory.length !== newCategory.length) {
+            const existingIds = existingCategory.map(category => category._id);
+            const nonExistingCategory = newCategory.filter(categoryId => !existingIds?.includes(categoryId));
+
+            return res.status(404).json({ error: `Not found these category IDs: ${nonExistingCategory.join(', ')}` });
+        }
+
+        // Add new category IDs to the coupon
+        await couponModel.findByIdAndUpdate(couponId, { $each: { category: { $addToSet: newCategory } } });
+
+        // Update req.body.category with the new category IDs
+        req.body.category = newCategory;
+
     }
 
-    // Update brands if provided
+    // Update brand if provided
     if (brand) {
-        const newBrands = Array.isArray(brand) ? brand : [brand];
+        const newBrand = Array.isArray(brand) ? brand : [brand];
 
-        for (const brandId of newBrands) {
-            if (coupon.brand.includes(brandId)) {
-                return res.status(409).json({ error: `Brand ID already exists ${brandId}. Choose another brand.` });
-            }
-
+        for (const brandId of newBrand) {
             const checkBrand = await brandModel.findById(brandId);
             if (!checkBrand) {
                 return res.status(404).json({ error: `Not found this brand ID ${brandId}` });
             }
         }
 
-        // Use $addToSet to add brands without duplication
-        await couponModel.findByIdAndUpdate(couponId, { $addToSet: { brand: { $each: newBrands } } });
+        // Check for existing brand
+        const existingBrand = await brandModel.find({ _id: { $in: newBrand } }, '_id').lean();
 
-        // Fetch the updated coupon
-        coupon = await couponModel.findById(couponId);
-        req.body.brand = coupon.brand;
+        if (existingBrand.length !== newBrand.length) {
+            const existingIds = existingBrand.map(brand => brand._id);
+            const nonExistingBrand = newBrand.filter(brandId => !existingIds?.includes(brandId));
+
+            return res.status(404).json({ error: `Not found these brand IDs: ${nonExistingBrand.join(', ')}` });
+        }
+
+        // Add new brand IDs to the coupon
+        await couponModel.findByIdAndUpdate(couponId, { $each: { brand: { $addToSet: newBrand } } });
+
+        // Update req.body.brand with the new brand IDs
+        req.body.brand = newBrand;
+
     }
 
+    // Update location if provided
+    if (location) {
+        const newLocation = Array.isArray(location) ? location : [location];
+
+        for (const locationId of newLocation) {
+            const checkLocation = await locationModel.findById(locationId);
+            if (!checkLocation) {
+                return res.status(404).json({ error: `Not found this location ID ${locationId}` });
+            }
+        }
+
+        // Check for existing location
+        const existingLocation = await locationModel.find({ _id: { $in: newLocation } }, '_id').lean();
+
+        if (existingLocation.length !== newLocation.length) {
+            const existingIds = existingLocation.map(location => location._id);
+            const nonExistingLocation = newLocation.filter(locationId => !existingIds?.includes(locationId));
+
+            return res.status(404).json({ error: `Not found these location IDs: ${nonExistingLocation.join(', ')}` });
+        }
+
+        // Add new location IDs to the coupon
+        await couponModel.findByIdAndUpdate(couponId, { $each: { location: { $addToSet: newLocation } } });
+
+        // Update req.body.location with the new location IDs
+        req.body.location = newLocation;
+
+    }
 
     req.body.updatedBy = req.user._id
 

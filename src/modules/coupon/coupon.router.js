@@ -48,4 +48,9 @@ router.patch('/:couponId/favorite/remove',
     validation(validators.favoriteValidation),
     couponController.deleteFromFavorite)
 
+// get all coupons
+router.get('/allCount/database',
+    couponController.getAllData)
+
+
 export default router

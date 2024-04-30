@@ -8,6 +8,7 @@ import userModel from "../../../../DB/model/User.model.js";
 import ApiFeatures from "../../../utils/apiFeature.js";
 import notificationModel from "../../../../DB/model/Notification.model.js";
 import cron from 'node-cron'
+import adsModel from "../../../../DB/model/Ads.model.js";
 
 
 export const getAllCouponsToDashboard = asyncHandler(async (req, res, next) => {
@@ -29,37 +30,72 @@ export const getAllCouponsToDashboard = asyncHandler(async (req, res, next) => {
 })
 
 
+// export const getCoupons = asyncHandler(async (req, res, next) => {
+
+//     const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')
+
+//     // Find coupon matching the selected location or the default location
+//     const apiFeature = new ApiFeatures(couponModel.find({
+//         isDeleted: false,
+//     }).lean(), req.query)
+//         .paginate()
+//         .filter()
+//         .sort()
+//         .search()
+//         .select()
+
+
+//     const coupon = await apiFeature.mongooseQuery
+
+//     coupon?.forEach((elm, index) => {
+
+//         // Set status and description based on locale
+//         const status = elm.status ? elm.status[locale] : undefined;
+//         const description = elm.description ? elm.description[locale] : undefined;
+
+//         // Update status and description
+//         coupon[index].status = status;
+//         coupon[index].description = description;
+//     });
+
+
+//     return res.status(200).json({ message: 'succuss', coupon })
+// })
+
 export const getCoupons = asyncHandler(async (req, res, next) => {
+    try {
+        const locale = req.params.locale || 'en'; // Get locale from request parameters (e.g., 'en' or 'ar')
 
-    const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')
+        // Find coupons matching the selected location or the default location
+        const apiFeature = new ApiFeatures(couponModel.find({
+            isDeleted: false,
+        }).lean(), req.query)
+            .paginate()
+            .filter()
+            .sort()
+            .search()
+            .select();
 
-    // Find coupon matching the selected location or the default location
-    const apiFeature = new ApiFeatures(couponModel.find({
-        isDeleted: false,
-    }).lean(), req.query)
-        .paginate()
-        .filter()
-        .sort()
-        .search()
-        .select()
+        const coupons = await apiFeature.mongooseQuery;
 
+        coupons.forEach((elm, index) => {
+            // Set status and description based on locale
+            const status = elm.status ? elm.status[locale] : undefined;
+            const description = elm.description ? elm.description[locale] : undefined;
 
-    const coupon = await apiFeature.mongooseQuery
+            // Update status and description
+            coupons[index].status = status;
+            coupons[index].description = description;
+        });
 
-    coupon?.forEach((elm, index) => {
+        const couponCount = coupons.length; // Get count of coupons from the array length
 
-        // Set status and description based on locale
-        const status = elm.status ? elm.status[locale] : undefined;
-        const description = elm.description ? elm.description[locale] : undefined;
+        return res.status(200).json({ message: 'success', couponCount, coupons });
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
-        // Update status and description
-        coupon[index].status = status;
-        coupon[index].description = description;
-    });
-
-
-    return res.status(200).json({ message: 'succuss', coupon })
-})
 
 
 export const createCoupon = asyncHandler(async (req, res, next) => {
@@ -411,3 +447,56 @@ export const deleteFromFavorite = asyncHandler(async (req, res, next) => {
 
     return res.status(201).json({ message: 'succuss' })
 })
+
+
+
+// // is all Date from Database
+// export const getAllData = asyncHandler(async (req, res, next) => {
+//     // Get the count of all coupons
+
+//     const couponCount = await couponModel.countDocuments();
+//     const categoryCount = await categoryModel.countDocuments();
+//     const brandCount = await brandModel.countDocuments();
+//     const userCount = await userModel.countDocuments();
+//     const adsCount = await adsModel.countDocuments();
+//     const locationCount = await locationModel.countDocuments();
+//     const notificationCount = await notificationModel.countDocuments();
+
+//     return res.status(200).json({
+//         message: 'success',
+//         couponCount,
+//         categoryCount,
+//         brandCount,
+//         userCount,
+//         adsCount,
+//         locationCount,
+//         notificationCount
+//     });
+// });
+
+export const getAllData = asyncHandler(async (req, res, next) => {
+    // Get the count of all coupons
+    const couponCount = await couponModel.countDocuments();
+    const categoryCount = await categoryModel.countDocuments();
+    const brandCount = await brandModel.countDocuments();
+    const userCount = await userModel.countDocuments();
+    const adsCount = await adsModel.countDocuments();
+    const locationCount = await locationModel.countDocuments();
+    const notificationCount = await notificationModel.countDocuments();
+
+    const dataArray = [
+        { name: 'couponCount', count: couponCount },
+        { name: 'categoryCount', count: categoryCount },
+        { name: 'brandCount', count: brandCount },
+        { name: 'userCount', count: userCount },
+        { name: 'adsCount', count: adsCount },
+        { name: 'locationCount', count: locationCount },
+        { name: 'notificationCount', count: notificationCount }
+    ];
+
+    return res.status(200).json({
+        message: 'success',
+        data: dataArray
+    });
+});
+

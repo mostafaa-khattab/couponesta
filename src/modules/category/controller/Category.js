@@ -32,43 +32,84 @@ export const getAllCategoriesToDashboard = asyncHandler(async (req, res, next) =
 })
 
 
+// export const getCategories = asyncHandler(async (req, res, next) => {
+
+//     const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')
+
+//     // Find brand matching the selected location or the default location
+//     const apiFeature = new ApiFeatures(categoryModel.find({
+//         isDeleted: false,
+//     }).lean(), req.query)
+//         .paginate()
+//         .filter()
+//         .sort()
+//         .search()
+//         .select()
+
+
+//     const category = await apiFeature.mongooseQuery
+
+//     category?.forEach((elm, index) => {
+//         // Check if image exists and update its URL
+//         if (elm.image) {
+//             category[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+//         }
+
+//         // Set name and description based on locale
+//         const name = elm.name ? elm.name[locale] : undefined;
+//         const description = elm.description ? elm.description[locale] : undefined;
+//         const slug = elm.slug ? elm.slug[locale] : undefined;
+
+//         // Update name and description
+//         category[index].name = name;
+//         category[index].description = description;
+//         category[index].slug = slug;
+//     });
+
+
+//     return res.status(200).json({ message: 'succuss', category })
+// })
+
 export const getCategories = asyncHandler(async (req, res, next) => {
+    try {
+        const locale = req.params.locale || 'en'; // Get locale from request parameters (e.g., 'en' or 'ar')
 
-    const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')
+        // Find categories matching the selected location or the default location
+        const apiFeature = new ApiFeatures(categoryModel.find({
+            isDeleted: false,
+        }).lean(), req.query)
+            .paginate()
+            .filter()
+            .sort()
+            .search()
+            .select();
 
-    // Find brand matching the selected location or the default location
-    const apiFeature = new ApiFeatures(categoryModel.find({
-        isDeleted: false,
-    }).lean(), req.query)
-        .paginate()
-        .filter()
-        .sort()
-        .search()
-        .select()
+        const categories = await apiFeature.mongooseQuery;
 
+        categories.forEach((elm, index) => {
+            // Check if image exists and update its URL
+            if (elm.image) {
+                categories[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            }
 
-    const category = await apiFeature.mongooseQuery
+            // Set name, description, and slug based on locale
+            const name = elm.name ? elm.name[locale] : undefined;
+            const description = elm.description ? elm.description[locale] : undefined;
+            const slug = elm.slug ? elm.slug[locale] : undefined;
 
-    category?.forEach((elm, index) => {
-        // Check if image exists and update its URL
-        if (elm.image) {
-            category[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
-        }
+            // Update name, description, and slug
+            categories[index].name = name;
+            categories[index].description = description;
+            categories[index].slug = slug;
+        });
 
-        // Set name and description based on locale
-        const name = elm.name ? elm.name[locale] : undefined;
-        const description = elm.description ? elm.description[locale] : undefined;
-        const slug = elm.slug ? elm.slug[locale] : undefined;
+        const categoryCount = categories.length; // Get count of categories from the array length
 
-        // Update name and description
-        category[index].name = name;
-        category[index].description = description;
-        category[index].slug = slug;
-    });
-
-
-    return res.status(200).json({ message: 'succuss', category })
-})
+        return res.status(200).json({ message: 'success', categoryCount, categories });
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 
 export const createCategory = asyncHandler(async (req, res, next) => {

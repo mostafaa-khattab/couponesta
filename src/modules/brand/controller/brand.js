@@ -37,41 +37,81 @@ export const getAllBrandsToDashboard = asyncHandler(async (req, res, next) => {
 })
 
 
+// export const getBrands = asyncHandler(async (req, res, next) => {
+
+//     const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')
+
+//     // Find brand matching the selected location or the default location
+//     const apiFeature = new ApiFeatures(brandModel.find({
+//         isDeleted: false,
+//     }).lean(), req.query)
+//         .paginate()
+//         .filter()
+//         .sort()
+//         .search()
+//         .select()
+
+
+//     const brand = await apiFeature.mongooseQuery
+
+//     brand?.forEach((elm, index) => {
+//         // Check if image exists and update its URL
+//         if (elm.image) {
+//             brand[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+//         }
+
+//         // Set name and description based on locale
+//         const name = elm.name ? elm.name[locale] : undefined;
+//         const description = elm.description ? elm.description[locale] : undefined;
+
+//         // Update name and description
+//         brand[index].name = name;
+//         brand[index].description = description;
+//     });
+
+
+//     return res.status(200).json({ message: 'succuss', brand })
+// })
+
 export const getBrands = asyncHandler(async (req, res, next) => {
+    try {
+        const locale = req.params.locale || 'en'; // Get locale from request parameters (e.g., 'en' or 'ar')
 
-    const locale = req.params.locale || 'en' // Get locale from request parameters (e.g., 'en' or 'ar')
+        // Find brand matching the selected location or the default location
+        const apiFeature = new ApiFeatures(brandModel.find({
+            isDeleted: false,
+        }).lean(), req.query)
+            .paginate()
+            .filter()
+            .sort()
+            .search()
+            .select();
 
-    // Find brand matching the selected location or the default location
-    const apiFeature = new ApiFeatures(brandModel.find({
-        isDeleted: false,
-    }).lean(), req.query)
-        .paginate()
-        .filter()
-        .sort()
-        .search()
-        .select()
+        const brands = await apiFeature.mongooseQuery;
 
+        brands.forEach((elm, index) => {
+            // Check if image exists and update its URL
+            if (elm.image) {
+                brands[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            }
 
-    const brand = await apiFeature.mongooseQuery
+            // Set name and description based on locale
+            const name = elm.name ? elm.name[locale] : undefined;
+            const description = elm.description ? elm.description[locale] : undefined;
 
-    brand?.forEach((elm, index) => {
-        // Check if image exists and update its URL
-        if (elm.image) {
-            brand[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
-        }
+            // Update name and description
+            brands[index].name = name;
+            brands[index].description = description;
+        });
 
-        // Set name and description based on locale
-        const name = elm.name ? elm.name[locale] : undefined;
-        const description = elm.description ? elm.description[locale] : undefined;
+        const brandCount = brands.length// Count all brands in the results
 
-        // Update name and description
-        brand[index].name = name;
-        brand[index].description = description;
-    });
+        return res.status(200).json({ message: 'success', brandCount, brands });
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
-
-    return res.status(200).json({ message: 'succuss', brand })
-})
 
 
 export const createBrand = asyncHandler(async (req, res, next) => {

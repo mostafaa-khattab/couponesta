@@ -250,11 +250,11 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
 
     // Update image if provided
     if (req.file) {
-        fs.unlinkSync(brand.image, (err) => {
-            if (err) {
-                // console.error("Error deleting previous image:", err);
-            }
-        });
+        // fs.unlinkSync(brand.image, (err) => {
+        //     if (err) {
+        //         // console.error("Error deleting previous image:", err);
+        //     }
+        // });
 
         req.body.image = req.file.dest;
     }

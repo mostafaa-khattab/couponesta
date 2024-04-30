@@ -428,11 +428,11 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
     // Update image if provided
     if (image && req.file) {
-        fs.unlinkSync(user.image, (err) => {
-            if (err) {
-                // console.error("Error deleting previous image:", err);
-            }
-        });
+        // fs.unlinkSync(user.image, (err) => {
+        //     if (err) {
+        //         // console.error("Error deleting previous image:", err);
+        //     }
+        // });
         image = req.file.dest;
     }
 

@@ -108,11 +108,11 @@ export const updateAds = asyncHandler(async (req, res, next) => {
 
     if (ads?.image && req?.file) {
         // Delete the previous image
-        fs.unlinkSync(ads.image, (err) => {
-            if (err) {
-                // console.error("Error deleting previous image:", err);
-            }
-        });
+        // fs.unlinkSync(ads.image, (err) => {
+        //     if (err) {
+        //         // console.error("Error deleting previous image:", err);
+        //     }
+        // });
 
         // Now update ads.image with the new file destination
         req.body.image = req.file.dest;
@@ -140,7 +140,7 @@ export const updateAds = asyncHandler(async (req, res, next) => {
         req.body.location = ads.location;
     }
 
-    
+
     req.body.updatedBy = req.user._id
 
     ads = await adsModel.findByIdAndUpdate(adsId, req.body, { new: true });

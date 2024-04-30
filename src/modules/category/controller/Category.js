@@ -332,13 +332,13 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
 
     // Update image if provided
     if (req.file) {
-        if (category.image) {
-            fs.unlinkSync(category.image, (err) => {
-                if (err) {
-                    // console.error("Error deleting previous image:", err);
-                }
-            });
-        }
+        // if (category.image) {
+        //     fs.unlinkSync(category.image, (err) => {
+        //         if (err) {
+        //             // console.error("Error deleting previous image:", err);
+        //         }
+        //     });
+        // }
         req.body.image = req.file.dest;
     }
 

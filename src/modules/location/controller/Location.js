@@ -100,13 +100,16 @@ export const updateLocation = asyncHandler(async (req, res, next) => {
 
     }
 
+    console.log(location.image);
+    console.log(req.file);
+
     if (location?.image && req?.file) {
         // Delete the previous image
-        fs.unlinkSync(location.image, (err) => {
-            if (err) {
-                // console.error("Error deleting previous image:", err);
-            }
-        });
+        // fs?.unlinkSync(location?.image, (err) => {
+        //     if (err) {
+        //         console.log("Error deleting previous image:", err);
+        //     }
+        // });
 
         // Now update location.image with the new file destination
         req.body.image = req.file.dest;

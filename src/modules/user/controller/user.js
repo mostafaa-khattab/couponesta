@@ -120,6 +120,8 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
         }
     });
 
+    console.log("okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+
     return res.status(200).json({ message: 'succuss', user })
 })
 
@@ -330,7 +332,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
                 margin: 0px;
             }
         </style>
-        
+
         <body style="margin:0px;">
             <table border="0" width="70%" style="margin:auto;padding:30px;background-color: #F3F3F3;border:1px solid teal;">
                 <tr>
@@ -406,24 +408,24 @@ export const updateUser = asyncHandler(async (req, res, next) => {
                             <tr>
                                 <td>
                                     <div style="margin-top:15px;">
-        
+
                                         <a href="${process.env.facebookLink}" style="text-decoration: none;"><span class="twit"
                                                 style="padding:10px 9px;color:#fff;border-radius:50%;">
                                                 <img src="https://res.cloudinary.com/ddajommsw/image/upload/v1670703402/Group35062_erj5dx.png"
                                                     width="50px" hight="50px"></span></a>
-        
+
                                         <a href="${process.env.instegram}" style="text-decoration: none;"><span class="twit"
                                                 style="padding:10px 9px;color:#fff;border-radius:50%;">
                                                 <img src="https://res.cloudinary.com/ddajommsw/image/upload/v1670703402/Group35063_zottpo.png"
                                                     width="50px" hight="50px"></span>
                                         </a>
-        
+
                                         <a href="${process.env.twitterLink}" style="text-decoration: none;"><span class="twit"
                                                 style="padding:10px 9px;;color:#fff;border-radius:50%;">
                                                 <img src="https://res.cloudinary.com/ddajommsw/image/upload/v1670703402/Group_35064_i8qtfd.png"
                                                     width="50px" hight="50px"></span>
                                         </a>
-        
+
                                     </div>
                                 </td>
                             </tr>
@@ -432,7 +434,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
                 </tr>
             </table>
             </body>
-            
+
             </html>`
 
         if (!await sendEmail({ to: email, subject: 'Confirmation Email 👋', html })) {
@@ -460,11 +462,6 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
     // Update image if provided
     if (image && req.file) {
-        // fs.unlinkSync(user.image, (err) => {
-        //     if (err) {
-        //         // console.error("Error deleting previous image:", err);
-        //     }
-        // });
         image = req.file.dest;
     }
 
@@ -484,7 +481,13 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
     // Update user with hashed password and other fields
     let updatedUser;
+
+    // console.log("hashPassword", hashPassword);
+
+    // console.log("bodyyyyyyyy", req.body);
+
     if (hashPassword) {
+
         updatedUser = await userModel.findByIdAndUpdate(
             userId,
             {
@@ -494,7 +497,11 @@ export const updateUser = asyncHandler(async (req, res, next) => {
             },
             { new: true }
         );
+
+        // console.log("update wirh passsss", updatedUser);
+
     } else {
+
         updatedUser = await userModel.findByIdAndUpdate(
             userId,
             {
@@ -504,6 +511,9 @@ export const updateUser = asyncHandler(async (req, res, next) => {
             },
             { new: true }
         );
+
+        // console.log("update anotherrrrrr", updatedUser);
+
     }
 
     if (!updatedUser) {
@@ -519,6 +529,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
     return res.status(200).json({ message: "success", user: updatedUser });
 });
+
 
 
 export const softDeleteUser = asyncHandler(async (req, res, next) => {

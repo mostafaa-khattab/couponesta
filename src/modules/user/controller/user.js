@@ -120,8 +120,6 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
         }
     });
 
-    console.log("okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-
     return res.status(200).json({ message: 'succuss', user })
 })
 

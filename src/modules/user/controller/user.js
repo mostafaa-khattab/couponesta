@@ -263,7 +263,7 @@ export const addUser = asyncHandler(async (req, res, next) => {
 
 export const updateUser = asyncHandler(async (req, res, next) => {
 
-    const { userId } = req.params;
+    let { userId } = req.params;
 
     // Find user by ID
     let user = await userModel.findById(userId);
@@ -271,9 +271,9 @@ export const updateUser = asyncHandler(async (req, res, next) => {
         return res.status(400).json({ error: 'Invalid user ID' });
     }
 
-    const { phoneNumber, countryCode, email, password } = req.body;
-    const image = req?.file?.dest;
-
+    let { phoneNumber, countryCode, email, password } = req.body;
+    let image = req?.file?.dest;
+    
     // check email exist
     if (email) {
         if (await userModel.findOne({ email: email.toLowerCase() })) {
@@ -399,15 +399,15 @@ export const updateUser = asyncHandler(async (req, res, next) => {
                     </td>
                 </tr>
             </table>
-        </body>
-        
-        </html>`
-
-        if (!await sendEmail({ to: email, subject: 'Confirmation Email 👋', html })) {
-            return res.status(400).json({ message: "Email Rejected" })
-        }
+            </body>
+            
+            </html>`
+            
+            if (!await sendEmail({ to: email, subject: 'Confirmation Email 👋', html })) {
+                return res.status(400).json({ message: "Email Rejected" })
+            }
     }
-
+    
     // Validate phone number if provided
     if (phoneNumber && countryCode) {
         const isValidPhoneNumber = validatePhoneNumber(phoneNumber, countryCode);
@@ -437,7 +437,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
     }
 
     // Update user with hashed password and other fields
-    const updatedUser = await userModel.findByIdAndUpdate(
+    let updatedUser = await userModel.findByIdAndUpdate(
         userId,
         {
             ...req.body,
@@ -457,6 +457,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
     if (updatedUser.image) {
         updatedUser.image = "https://mostafa-e-commerce.onrender.com/" + updatedUser.image;
     }
+
 
     return res.status(200).json({ message: "success", user: updatedUser });
 });

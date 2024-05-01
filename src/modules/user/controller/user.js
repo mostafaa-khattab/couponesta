@@ -92,6 +92,38 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
     return res.status(200).json({ message: 'succuss', users })
 })
 
+export const getLoggedUser = asyncHandler(async (req, res, next) => {
+
+    let { userId } = req.params;
+
+    // Find brand matching the selected location or the default location
+    const apiFeature = new ApiFeatures(userModel.findById(userId, {
+        isDeleted: false,
+    }).lean()
+        .populate('follow', 'name slug link')
+        .populate('createdBy', 'fullName')
+        .populate('updatedBy', 'fullName')
+        .populate('favorite')
+        .populate('notification', 'header body'), req.query)
+        .paginate()
+        .filter()
+        .sort()
+        .search()
+        .select()
+
+    let user = await apiFeature.mongooseQuery
+
+    user?.forEach((elm, index) => {
+        // Check if image exists and update its URL
+        if (elm.image) {
+            user[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+        }
+    });
+
+    return res.status(200).json({ message: 'succuss', user })
+})
+
+
 export const addUser = asyncHandler(async (req, res, next) => {
 
     const { phoneNumber, countryCode, email, password } = req.body
@@ -273,7 +305,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
     let { phoneNumber, countryCode, email, password } = req.body;
     let image = req?.file?.dest;
-    
+
     // check email exist
     if (email) {
         if (await userModel.findOne({ email: email.toLowerCase() })) {
@@ -402,12 +434,12 @@ export const updateUser = asyncHandler(async (req, res, next) => {
             </body>
             
             </html>`
-            
-            if (!await sendEmail({ to: email, subject: 'Confirmation Email 👋', html })) {
-                return res.status(400).json({ message: "Email Rejected" })
-            }
+
+        if (!await sendEmail({ to: email, subject: 'Confirmation Email 👋', html })) {
+            return res.status(400).json({ message: "Email Rejected" })
+        }
     }
-    
+
     // Validate phone number if provided
     if (phoneNumber && countryCode) {
         const isValidPhoneNumber = validatePhoneNumber(phoneNumber, countryCode);
@@ -436,22 +468,48 @@ export const updateUser = asyncHandler(async (req, res, next) => {
         image = req.file.dest;
     }
 
+    // // Update user with hashed password and other fields
+    // let updatedUser = await userModel.findByIdAndUpdate(
+    //     userId,
+    //     {
+    //         ...req.body,
+    //         password: hashPassword,
+    //         changePasswordTime: Date.now(),
+    //         image,
+    //         updatedBy: req.user._id
+    //     },
+    //     { new: true }
+    // );
+
+
     // Update user with hashed password and other fields
-    let updatedUser = await userModel.findByIdAndUpdate(
-        userId,
-        {
-            ...req.body,
-            password: hashPassword,
-            changePasswordTime: Date.now(),
-            image,
-            updatedBy: req.user._id
-        },
-        { new: true }
-    );
+    let updatedUser;
+    if (hashPassword) {
+        updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            {
+                password: hashPassword,
+                changePasswordTime: Date.now(),
+                updatedBy: req.user._id
+            },
+            { new: true }
+        );
+    } else {
+        updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            {
+                ...req.body,
+                image,
+                updatedBy: req.user._id
+            },
+            { new: true }
+        );
+    }
 
     if (!updatedUser) {
         return next(new Error("User not found", { status: 404 }));
     }
+
 
     // Append BASE_URL to the image field
     if (updatedUser.image) {

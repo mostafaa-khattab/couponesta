@@ -19,6 +19,7 @@ router.get('/favorite/:locale?',
     auth([roles.User, roles.Admin]),
     userController.getAllUserFavorite)
 
+
 router.get('/follow/:locale?',
     auth([roles.User, roles.Admin]),
     userController.getAllUserFollow)
@@ -26,6 +27,11 @@ router.get('/follow/:locale?',
 router.get('/',
     auth([roles.Admin]),
     userController.getAllUsers)
+
+router.get('/loggedUser/:userId',
+    auth([roles.Admin, roles.User, roles.Employee]),
+    validation(validators.getLoggedUserValidation),
+    userController.getLoggedUser)
 
 router.post('/',
     auth([roles.Admin]),

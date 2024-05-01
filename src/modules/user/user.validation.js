@@ -1,6 +1,11 @@
 import joi from 'joi'
 import { generalFields } from '../../middleware/validation.js'
 
+export const getLoggedUserValidation = joi.object({
+
+    userId: generalFields.id
+    
+}).required()
 
 export const createUserValidation = joi.object({
     fullName: joi.string().min(2).max(100).required(),

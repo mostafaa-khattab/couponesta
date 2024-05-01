@@ -331,14 +331,16 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
     }
 
     // Update image if provided
-    if (req.file) {
-        // if (category.image) {
-        //     fs.unlinkSync(category.image, (err) => {
-        //         if (err) {
-        //             // console.error("Error deleting previous image:", err);
-        //         }
-        //     });
-        // }
+    if (category?.image && req?.file) {
+
+        // Delete the previous image
+        // fs?.unlinkSync(category?.image, (err) => {
+        //     if (err) {
+        //         console.log("Error deleting previous image:", err);
+        //     }
+        // });
+
+        // Now update category.image with the new file destination
         req.body.image = req.file.dest;
     }
 

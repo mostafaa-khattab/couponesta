@@ -13,7 +13,7 @@ router.get('/:locale?',
     // validation(validators.getAllBrandValidation),
     brandController.getBrands)
 
-router.get('/all/fovorite/:locale?',
+router.get('/all/favorite/:locale?',
     // validation(validators.getAllBrandValidation),
     brandController.getFovouriteBrands)
 

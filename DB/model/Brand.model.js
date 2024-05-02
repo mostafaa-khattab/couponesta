@@ -47,6 +47,10 @@ const brandSchema = new Schema({
         }
     ],
 
+    mostUse: { type: Number, default: 0 },
+    mostFollowed: { type: Number, default: 0 },
+
+
     createdBy: {
         type: Types.ObjectId,
         ref: 'User',

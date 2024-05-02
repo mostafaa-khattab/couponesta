@@ -113,6 +113,47 @@ export const getBrands = asyncHandler(async (req, res, next) => {
 });
 
 
+export const getFovouriteBrands = asyncHandler(async (req, res, next) => {
+
+    try {
+        const locale = req.params.locale || 'en'; // Get locale from request parameters (e.g., 'en' or 'ar')
+
+        // Find all users and populate their followed brands
+        const users = await userModel.find({}).populate('follow');
+
+        // Get followed brands from the first user, assuming it's the same for all users
+        const followedBrands = users[0]?.follow || [];
+
+        // Populate followed brands with localized name and description
+        const localizedBrands = followedBrands.map(brand => ({
+            ...brand.toObject(), // Convert Mongoose object to plain object
+            name: brand.name[locale] || brand.name['en'],
+            description: brand.description[locale] || brand.description['en']
+        }));
+
+        // Update image URLs if available
+        const updatedBrands = localizedBrands.map(brand => {
+            if (brand.image) {
+                brand.image = "https://mostafa-e-commerce.onrender.com/" + brand.image;
+            }
+            return brand;
+        });
+
+        // Count the number of brands
+        const brandCount = updatedBrands.length;
+
+        return res.status(200).json({ message: 'success', brandCount, brands: updatedBrands });
+
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+
+
+
 
 export const createBrand = asyncHandler(async (req, res, next) => {
 
@@ -314,6 +355,33 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
     if (brand.image) {
         brand.image = "https://mostafa-e-commerce.onrender.com/" + brand.image;
     }
+
+    return res.status(201).json({ message: 'success', brand });
+
+})
+
+export const updateBrandMost = asyncHandler(async (req, res, next) => {
+
+    const { brandId } = req.params;
+    let brand = await brandModel.findById(brandId)
+    if (!brand) {
+        return next(new Error(`In-valid brand ID`, { cause: 400 }))
+    }
+
+    // Create a new object to hold non-empty values
+    let updatedData = {};
+
+    // Loop through each key in req.body
+    for (const key of Object.keys(req.body)) {
+        // Check if the value is not an empty string
+        if (req.body[key] !== "") {
+            // If it's not empty, add it to the updatedData object
+            updatedData[key] = req.body[key];
+        }
+    }
+
+    // Update brand with updatedData and return the updated brand
+    brand = await brandModel.findByIdAndUpdate(brandId, updatedData, { new: true });
 
     return res.status(201).json({ message: 'success', brand });
 

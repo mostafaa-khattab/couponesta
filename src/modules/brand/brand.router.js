@@ -13,6 +13,10 @@ router.get('/:locale?',
     // validation(validators.getAllBrandValidation),
     brandController.getBrands)
 
+router.get('/all/fovorite/:locale?',
+    // validation(validators.getAllBrandValidation),
+    brandController.getFovouriteBrands)
+
 
 router.post('/',
     auth([roles.Admin]),
@@ -25,6 +29,10 @@ router.put('/:brandId',
     fileUpload('brand', fileValidation.image).single('image'),
     validation(validators.updateBrandValidation),
     brandController.updateBrand)
+
+router.put('/most/:brandId',
+    validation(validators.updateBrandMostValidation),
+    brandController.updateBrandMost)
 
 
 router.put('/trash/:locale?',

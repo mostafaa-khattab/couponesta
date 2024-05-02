@@ -59,6 +59,8 @@ export const getAllUserFollow = asyncHandler(async (req, res, next) => {
         coup.description = coup.description[`${locale}`] || `coupons- ${locale}`
     })
 
+
+
     !userFollow && next(new AppError(`user follow not found`, 404))
     userFollow && res.status(202).json({ message: " success", userFollow: userFollow.follow })
 })

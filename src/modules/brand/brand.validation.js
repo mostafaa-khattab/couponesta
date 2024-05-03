@@ -50,13 +50,6 @@ export const updateBrandValidation = joi.object({
 
 }).required()
 
-export const updateBrandMostValidation = joi.object({
-
-    brandId: generalFields.id,
-    mostUse: joi.number().min(0).integer().allow(''),
-    mostFollowed: joi.number().min(0).integer().allow(''),
-
-}).required()
 
 export const deleteBrandsValidation = joi.object({
 

@@ -47,7 +47,7 @@ const brandSchema = new Schema({
         }
     ],
 
-    mostUse: { type: Number, default: 0 },
+    mostUsed: { type: Number, default: 0 },
     mostFollowed: { type: Number, default: 0 },
 
 

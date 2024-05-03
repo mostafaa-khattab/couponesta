@@ -365,27 +365,29 @@ export const updateBrandMost = asyncHandler(async (req, res, next) => {
     const { brandId } = req.params;
     let brand = await brandModel.findById(brandId)
     if (!brand) {
-        return next(new Error(`In-valid brand ID`, { cause: 400 }))
+        return next(new Error(`Invalid brand ID`, { cause: 400 }))
     }
 
-    // Create a new object to hold non-empty values
-    let updatedData = {};
-
-    // Loop through each key in req.body
-    for (const key of Object.keys(req.body)) {
-        // Check if the value is not an empty string
-        if (req.body[key] !== "") {
-            // If it's not empty, add it to the updatedData object
-            updatedData[key] = req.body[key];
-        }
-    }
+    // Assuming updatedData is the data you want to update
+    const updatedData = {
+        // your other fields,
+        mostUsed: (brand.mostUsed || 0) + 1,
+        mostFollowed: (brand.mostFollowed || 0) + 1
+    };
 
     // Update brand with updatedData and return the updated brand
     brand = await brandModel.findByIdAndUpdate(brandId, updatedData, { new: true });
 
-    return res.status(201).json({ message: 'success', brand });
+    return res.status(201).json({
+        message: 'success',
+        mostUsed: brand.mostUsed,
+        mostFollowed: brand.mostFollowed,
+        brand
+    });
 
 })
+
+
 
 export const deleteBrand = asyncHandler(async (req, res, next) => {
     const { brandId } = req.params;

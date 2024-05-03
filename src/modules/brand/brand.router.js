@@ -13,7 +13,7 @@ router.get('/:locale?',
     // validation(validators.getAllBrandValidation),
     brandController.getBrands)
 
-router.get('/all/favorite/:locale?',
+router.get('/all/favorite/data/:locale?',
     // validation(validators.getAllBrandValidation),
     brandController.getFovouriteBrands)
 
@@ -31,7 +31,6 @@ router.put('/:brandId',
     brandController.updateBrand)
 
 router.put('/most/:brandId',
-    validation(validators.updateBrandMostValidation),
     brandController.updateBrandMost)
 
 

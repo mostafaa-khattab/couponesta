@@ -13,6 +13,11 @@ router.get('/:locale?',
     // validation(validators.getAllCouponValidation),
     couponController.getCoupons)
 
+router.get('/all/favorite/data/:locale?',
+    // validation(validators.getAllCouponValidation),
+    couponController.getFavoriteCoupons)
+
+
 router.post('/',
     auth([roles.Admin]),
     validation(validators.createCouponValidation),

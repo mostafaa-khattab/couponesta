@@ -96,6 +96,45 @@ export const getCoupons = asyncHandler(async (req, res, next) => {
     }
 });
 
+export const getFavoriteCoupons = asyncHandler(async (req, res, next) => {
+    try {
+        const locale = req.params.locale || 'en'; // Get locale from request parameters (e.g., 'en' or 'ar')
+
+        // Find all users and populate their favorite brands
+        const users = await userModel.find({}).populate('favorite');
+
+        // Get favorite brands from the first user, assuming it's the same for all users
+        const favoriteCoupons = users[0]?.favorite || [];
+
+        // Populate favorite brands with localized name and description
+        const localizedCoupons = favoriteCoupons.map(coupon => ({
+            ...coupon.toObject(), // Convert Mongoose object to plain object
+            description: coupon.description[locale] || coupon.description['en'],
+            status: coupon.status[locale] || coupon.status['en'],
+        }));
+
+        // Update image URLs if available
+        const updatedCoupons = localizedCoupons.map(coupon => {
+            if (coupon.image) {
+                coupon.image = "https://mostafa-e-commerce.onrender.com/" + coupon.image;
+            }
+            return coupon;
+        });
+
+        // Count the number of coupons
+        const couponCount = updatedCoupons.length;
+
+        return res.status(200).json({ message: 'success', couponCount, coupons: updatedCoupons });
+
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+
+
 
 
 export const createCoupon = asyncHandler(async (req, res, next) => {

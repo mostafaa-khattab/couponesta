@@ -45,6 +45,8 @@ const categorySchema = new Schema({
 
     icon: String,
 
+    color: String,
+
     createdBy: {
         type: Types.ObjectId,
         ref: 'User',

@@ -115,7 +115,7 @@ export const getCategories = asyncHandler(async (req, res, next) => {
 export const createCategory = asyncHandler(async (req, res, next) => {
 
     // Extract English and Arabic names and descriptions from request body
-    const { en_name, ar_name, en_description, ar_description, icon } = req.body;
+    const { en_name, ar_name, en_description, ar_description, icon, color } = req.body;
 
     // Convert names to lowercase
     const enName = en_name.toLowerCase();
@@ -163,6 +163,7 @@ export const createCategory = asyncHandler(async (req, res, next) => {
         },
         image,
         icon,
+        color,
         description: {
             en: en_description,
             ar: ar_description

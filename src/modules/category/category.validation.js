@@ -11,7 +11,8 @@ export const createCategoryValidation = joi.object({
         generalFields.id.required(), // Single ID
         generalFields.idArray.required() // Array of IDs
     ).required(),
-    icon: joi.string().required()
+    icon: joi.string().required().allow(''),
+    color: joi.string().allow('').required(),
 }).required()
 
 export const updateCategoryValidation = joi.object({
@@ -27,6 +28,7 @@ export const updateCategoryValidation = joi.object({
         generalFields.idArrayUpdate // Array of IDs
     ),
     icon: joi.string().allow(''),
+    color: joi.string().allow(''),
     isDeleted: joi.boolean(),
 
 }).required()

@@ -17,7 +17,7 @@ export const validatePhoneNumber = (phoneNumber, countryCode) => {
 };
 
 // // Example usage
-// const phoneNumber = '+1234567890'; // Phone number to validate
-// const countryCode = 'US'; // Country code (e.g., US for United States)
+// const phoneNumber = '01024332335'; // Phone number to validate
+// const countryCode = 'EG'; // Country code (e.g., US for United States)
 // const isValid = validatePhoneNumber(phoneNumber, countryCode);
 // console.log('Is phone number valid?', isValid);

@@ -5,7 +5,7 @@ const couponSchema = new Schema({
 
     code: {
         type: String,
-        required: [true, 'code is required'],
+        // required: [true, 'code is required'],
         trim: true,
         lower: true
     },
@@ -75,6 +75,11 @@ const couponSchema = new Schema({
         trim: true,
     },
 
+    link: {
+        type: String,
+        trim: true
+    },
+
     usedCount: { type: Number, default: 0 },
 
     // like
@@ -96,8 +101,8 @@ couponSchema.pre(/^find/, function () {
         .populate('updatedBy', 'fullName')
         .populate('location', 'name locationCode')
         .populate('category', 'name slug ')
-        .populate('brand' , 'name slug link')
-        
+        .populate('brand', 'name slug link')
+
 })
 
 const couponModel = mongoose.models.Coupon || model("Coupon", couponSchema)

@@ -138,17 +138,23 @@ export const getFavoriteCoupons = asyncHandler(async (req, res, next) => {
 
 
 export const createCoupon = asyncHandler(async (req, res, next) => {
-    req.body.code = req.body.code.toLowerCase();
+
+
     if ((new Date(req.body.expire)) < (new Date())) return res.status(400).json({ message: "In-valid Date" })
 
     // Extract English and Arabic names and descriptions from request body
     let { brand, category, location, en_description, ar_description, en_status, ar_status } = req.body;
 
-    req.body.qrCode = await QRCode.toDataURL(req.body.code);
+    if (req.body.code) {
+        req.body.code = req.body.code.toLowerCase();
 
-    const checkCoupon = await couponModel.findOne({ code: req.body.code, isDeleted: false });
-    if (checkCoupon) {
-        return next(new Error(`Duplicate coupon code ${req.body.code}`, { cause: 409 }));
+        req.body.qrCode = await QRCode.toDataURL(req.body.code);
+
+        const checkCoupon = await couponModel.findOne({ code: req.body.code, isDeleted: false });
+        if (checkCoupon) {
+            return next(new Error(`Duplicate coupon code ${req.body.code}`, { cause: 409 }));
+        }
+
     }
 
     // Check each category ID in the array
@@ -196,6 +202,13 @@ export const createCoupon = asyncHandler(async (req, res, next) => {
     }
 
 
+    let link = ""
+    if (req.body.link) {
+
+        link = req.body.link
+    }
+
+
     const coupon = await couponModel.create({
         ...req.body,
         description: {
@@ -206,6 +219,7 @@ export const createCoupon = asyncHandler(async (req, res, next) => {
             en: en_status,
             ar: ar_status
         },
+        link,
         createdBy: req.user._id,
     });
 

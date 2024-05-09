@@ -1,14 +1,25 @@
 import joi from "joi";
 import { generalFields } from "../../middleware/validation.js";
 
+// Function to validate URL
+const validateURL = (value, helper) => {
+    try {
+        new URL(value);
+        return true;
+    } catch (error) {
+        return helper.message('Invalid URL');
+    }
+};
+
 export const createCouponValidation = joi.object({
 
-    code: joi.string().min(1).max(50).required(),
+    code: joi.string().min(1).max(50),
+    link: joi.string().min(1).max(200).allow('').custom(validateURL),
     en_description: joi.string().trim().allow('').max(1000), // Optional
     ar_description: joi.string().trim().allow('').max(1000),
     en_status: joi.string().valid('discount', 'cashback').default('discount').required(),
     ar_status: joi.string().valid('خصم', 'كاش باك').default('خصم').required(),
-    amount: joi.number().positive().min(1).max(100).required(),
+    amount: joi.number().positive().min(1).max(100),
     expire: joi.string(),
     usedCount: joi.number().min(0).integer(),
     likeCount: joi.number().min(0).integer(),
@@ -28,10 +39,12 @@ export const createCouponValidation = joi.object({
     ).required(),
 }).required()
 
+
 export const updateCouponValidation = joi.object({
 
     couponId: generalFields.id,
     code: joi.string().allow(''),
+    link: joi.string().min(1).max(200).allow('').custom(validateURL),
     en_description: joi.string().trim().allow('').max(1000), // Optional
     ar_description: joi.string().trim().allow('').max(1000),
     en_status: joi.string().valid('discount', 'cashback').default('discount').allow(''),

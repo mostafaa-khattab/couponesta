@@ -96,10 +96,10 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
 
 export const getLoggedUser = asyncHandler(async (req, res, next) => {
 
-    let { userId } = req.params;
+    // let { userId } = req.params;
 
     // Find brand matching the selected location or the default location
-    const apiFeature = new ApiFeatures(userModel.findById(userId, {
+    const apiFeature = new ApiFeatures(userModel.findById(req.user._id, {
         isDeleted: false,
     }).lean()
         .populate('follow', 'name slug link')

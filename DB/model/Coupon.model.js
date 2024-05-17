@@ -86,6 +86,11 @@ const couponSchema = new Schema({
     likeCount: { type: Number, default: 0 },
     dislikeCount: { type: Number, default: 0 },
 
+    // isFavorite: {
+    //     type: Boolean,
+    //     default: false
+    // },
+
     isDeleted: {
         type: Boolean,
         default: false
@@ -100,10 +105,11 @@ couponSchema.pre(/^find/, function () {
     this.populate('createdBy', 'fullName')
         .populate('updatedBy', 'fullName')
         .populate('location', 'name locationCode')
-        .populate('category', 'name slug ')
-        .populate('brand', 'name slug link')
+        .populate('category', 'name slug image icon')
+        .populate('brand', 'name slug link image')
 
 })
 
 const couponModel = mongoose.models.Coupon || model("Coupon", couponSchema)
+
 export default couponModel

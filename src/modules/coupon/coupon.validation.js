@@ -13,18 +13,18 @@ const validateURL = (value, helper) => {
 
 export const createCouponValidation = joi.object({
 
-    code: joi.string().min(1).max(50),
+    code: joi.string().max(50).allow('').default(''),
     link: joi.string().min(1).max(200).allow('').custom(validateURL),
     en_description: joi.string().trim().allow('').max(1000), // Optional
     ar_description: joi.string().trim().allow('').max(1000),
     en_status: joi.string().valid('discount', 'cashback').default('discount').required(),
     ar_status: joi.string().valid('خصم', 'كاش باك').default('خصم').required(),
     amount: joi.number().positive().min(1).max(100),
-    expire: joi.string(),
+    expire: joi.string().allow(''),
     usedCount: joi.number().min(0).integer(),
     likeCount: joi.number().min(0).integer(),
     dislikeCount: joi.number().min(0).integer(),
-    expire: joi.date().required(),
+    expire: joi.date().allow(''),
     category: joi.alternatives().try(
         generalFields.id.required(), // Single ID
         generalFields.idArray.required() // Array of IDs

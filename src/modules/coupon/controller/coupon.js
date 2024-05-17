@@ -139,7 +139,6 @@ export const getFavoriteCoupons = asyncHandler(async (req, res, next) => {
 
 export const createCoupon = asyncHandler(async (req, res, next) => {
 
-
     if ((new Date(req.body.expire)) < (new Date())) return res.status(400).json({ message: "In-valid Date" })
 
     // Extract English and Arabic names and descriptions from request body
@@ -232,12 +231,12 @@ export const createCoupon = asyncHandler(async (req, res, next) => {
 
         notification = await notificationModel.create({
             header: {
-                en: req.body.code,
-                ar: req.body.code
+                en: req.body.code || "use discount",
+                ar: req.body.code || "استخدم الخصم"
             },
             body: {
-                en: coupon.description.en,
-                ar: coupon.description.ar
+                en: coupon.description.en || "Includes all products",
+                ar: coupon.description.ar || "يشمل جميع المنتجات"
             },
             user: [user._id],
             createdBy: req.user._id

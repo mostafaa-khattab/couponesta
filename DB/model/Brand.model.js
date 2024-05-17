@@ -69,6 +69,11 @@ const brandSchema = new Schema({
         }
     ],
 
+    // isFollowed: {
+    //     type: Boolean,
+    //     default: false
+    // },
+
     isDeleted: {
         type: Boolean,
         default: false

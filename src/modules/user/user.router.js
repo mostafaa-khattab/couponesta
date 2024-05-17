@@ -28,9 +28,9 @@ router.get('/',
     auth([roles.Admin]),
     userController.getAllUsers)
 
-router.get('/loggedUser/data/:userId',
+router.get('/loggedUser/data',
     auth([roles.Admin, roles.User, roles.Employee]),
-    validation(validators.getLoggedUserValidation),
+    // validation(validators.getLoggedUserValidation),
     userController.getLoggedUser)
 
 router.post('/',

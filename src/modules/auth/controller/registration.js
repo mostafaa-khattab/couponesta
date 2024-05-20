@@ -164,7 +164,7 @@ export const signupEmail = asyncHandler(async (req, res, next) => {
                             <td>
                                 <p><a href="${rfLink}" target="_blank"
                                         style="cursor: pointer;text-decoration: none;font-weight: 900;margin:10px 0px 30px 0px;border-radius:4px;padding:10px 20px;border: 0;color:#fff;background-color:darkgoldenrod; ">
-                                        Request new Email</a></p>
+                                        Request new Confirmation Email</a></p>
                             </td>
                         </tr>
                     </table>
@@ -220,7 +220,13 @@ export const signupEmail = asyncHandler(async (req, res, next) => {
     // save
     const user = await userModel.create({ fullName, email, password: hashPassword, joined: Date.now() })
 
-    return res.status(201).json({ message: "success", user })
+    const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+
+    user.status = "online"
+    await user.save()
+
+    return res.status(201).json({ message: "success", user, access_token, refresh_token })
 
 })
 
@@ -252,7 +258,13 @@ export const signupPhone = asyncHandler(async (req, res, next) => {
         confirmAccount: true
     })
 
-    return res.status(201).json({ message: "success", user })
+    const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+
+    user.status = "online"
+    await user.save()
+
+    return res.status(201).json({ message: "success", user, access_token, refresh_token })
 
 })
 
@@ -269,7 +281,7 @@ export const confirmAccount = asyncHandler(async (req, res, next) => {
         // return res.status(404).redirect(`${process.env.FE_URL}/#/invalidEmail`)
         return res.status(404).send(`<h1>Not register account.</h1>`)
     } else {
-        return res.status(404).redirect(`${process.env.FE_URL}/#/login`)
+        return res.status(404).redirect(`https://couponesta.surge.sh/`)
     }
 })
 
@@ -288,7 +300,7 @@ export const RequestNewconfirmAccount = asyncHandler(async (req, res, next) => {
     }
 
     if (user.confirmAccount) {
-        return res.status(200).redirect(`${process.env.FE_URL}/#/login`)
+        return res.status(200).redirect(`https://couponesta.surge.sh/`)
 
     }
 

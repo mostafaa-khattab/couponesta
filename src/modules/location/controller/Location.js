@@ -42,6 +42,7 @@ export const createLocation = asyncHandler(async (req, res, next) => {
     if (checkLocationName) {
         return next(new Error(`Duplicate location name ${name}`, { cause: 409 }))
     }
+    
 
     const checkLocationCode = await locationModel.findOne({ locationCode })
     if (checkLocationCode) {
@@ -54,6 +55,9 @@ export const createLocation = asyncHandler(async (req, res, next) => {
         image,
         createdBy: req.user._id
     })
+
+    console.log(image);
+    console.log(location);
 
     return res.status(201).json({ message: 'succuss', location })
 

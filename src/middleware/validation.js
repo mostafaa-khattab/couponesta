@@ -2,7 +2,7 @@ import joi from 'joi'
 import { Types } from 'mongoose'
 
 const validateObjectId = (value, helper) => {
-    
+
     return Types.ObjectId.isValid(value) ? true : helper.message('In-valid objectId')
 }
 
@@ -16,17 +16,18 @@ export const generalFields = {
     idArray: joi.array().items(joi.string().custom(validateObjectId).required()).min(1).required(),
     idArrayUpdate: joi.array().items(joi.string().custom(validateObjectId).required()).min(1),
     token: joi.string().pattern(/^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$/).required(),
-    file: joi.object({
-        size: joi.number().positive().required(),
-        path: joi.string().required(),
-        filename: joi.string().required(),
-        destination: joi.string().required(),
-        mimetype: joi.string().required(),
-        encoding: joi.string().required(),
-        originalname: joi.string().required(),
-        fieldname: joi.string().required()
+    // file: joi.object({
+    //     size: joi.number().positive().required(),
+    //     path: joi.string().required(),
+    //     filename: joi.string().required(),
+    //     destination: joi.string().required(),
+    //     mimetype: joi.string().required(),
+    //     encoding: joi.string().required(),
+    //     originalname: joi.string().required(),
+    //     fieldname: joi.string().required()
 
-    })
+    // })
+    file: joi.any().allow(' ')
 }
 
 export const validation = (schema) => {
@@ -35,7 +36,7 @@ export const validation = (schema) => {
         let inputsData = { ...req.body, ...req.params, ...req.query }
 
         const validationResult = schema.validate(inputsData, { abortEarly: false })
-        
+
         if (validationResult.error) {
             return res.json({ message: `validation error:`, validationResult: validationResult.error.details })
         }

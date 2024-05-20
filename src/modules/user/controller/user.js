@@ -71,11 +71,11 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
     const apiFeature = new ApiFeatures(userModel.find({
         isDeleted: false,
     }).lean()
-        .populate('follow', 'name slug link')
+        .populate('follow')
         .populate('createdBy', 'fullName')
         .populate('updatedBy', 'fullName')
         .populate('favorite')
-        .populate('notification', 'header body'), req.query)
+        .populate('notification'), req.query)
         .paginate()
         .filter()
         .sort()
@@ -102,11 +102,11 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
     const apiFeature = new ApiFeatures(userModel.findById(req.user._id, {
         isDeleted: false,
     }).lean()
-        .populate('follow', 'name slug link')
+        .populate('follow')
         .populate('createdBy', 'fullName')
         .populate('updatedBy', 'fullName')
         .populate('favorite')
-        .populate('notification', 'header body'), req.query)
+        .populate('notification'), req.query)
         .paginate()
         .filter()
         .sort()

@@ -3,16 +3,16 @@ import { generalFields } from '../../middleware/validation.js'
 
 
 export const signUpValidationEmail = joi.object({
-    fullName: joi.string().min(2).max(50).required(),
+    fullName: joi.string(),
     email: generalFields.email,
     password: generalFields.password,
 }).required()
 
 export const signUpValidationPhone = joi.object({
-    fullName: joi.string().min(2).max(50).required(),
+    fullName: joi.string(),
     password: generalFields.password,
-    phoneNumber: joi.string().required(),
-    countryCode: joi.string().required(),
+    phoneNumber: joi.string(),
+    countryCode: joi.string(),
 }).required()
 
 export const loginEmailValidation = joi.object({
@@ -21,8 +21,8 @@ export const loginEmailValidation = joi.object({
 }).required()
 
 export const loginPhoneValidation = joi.object({
-    phoneNumber: joi.string().required(),
-    countryCode: joi.string().required(),
+    phoneNumber: joi.string(),
+    countryCode: joi.string(),
     password: generalFields.password,
 }).required()
 
@@ -38,16 +38,16 @@ export const sendEmailToChangePasswordValidation = joi.object({
 export const forgetPasswordEmailValidation = joi.object({
     email: generalFields.email,
     password: generalFields.password,
-    cPassword: joi.string().valid(joi.ref('password')).required().messages({
+    cPassword: joi.string().valid(joi.ref('password')).messages({
         'any.only': 'Repeat confirm password must match new password',
     }),
 }).required()
 
 export const forgetPasswordPhoneValidation = joi.object({
-    phoneNumber: joi.string().required(),
-    countryCode: joi.string().required(),
+    phoneNumber: joi.string(),
+    countryCode: joi.string(),
     password: generalFields.password,
-    cPassword: joi.string().valid(joi.ref('password')).required().messages({
+    cPassword: joi.string().valid(joi.ref('password')).messages({
         'any.only': 'Repeat confirm password must match new password',
     }),
 }).required()

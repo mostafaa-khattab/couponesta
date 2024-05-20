@@ -87,8 +87,8 @@ brandSchema.pre(/^find/, function () {
 
     this.populate('createdBy', 'fullName')
         .populate('updatedBy', 'fullName')
-        .populate('location', 'name locationCode')
-        .populate('category', 'name slug ')
+        .populate('location', 'name locationCode image')
+        .populate('category', 'name slug image icon')
 })
 
 const brandModel = mongoose.models.Brand || model("Brand", brandSchema)

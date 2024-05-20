@@ -43,9 +43,9 @@ router.delete('/:brandId',
     validation(validators.deleteBrandsValidation),
     brandController.deleteBrand)
 
-    
+
 router.patch('/:brandId/follow/add',
-    auth([roles.User, roles.Admin]),
+    auth([roles.User, roles.Admin, roles.Employee]),
     validation(validators.followValidation),
     brandController.addFollow)
 

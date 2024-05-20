@@ -441,6 +441,17 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
         };
     }
 
+    // Update status if provided
+    if (updatedData.ar_status || updatedData.en_status) {
+        let newEnDesc = updatedData.en_status ? updatedData.en_status.toLowerCase() : coupon.status.en;
+        let newArDesc = updatedData.ar_status ? updatedData.ar_status.toLowerCase() : coupon.status.ar;
+
+        updatedData.status = {
+            en: newEnDesc,
+            ar: newArDesc
+        };
+    }
+
     // Update category if provided
     if (updatedData.category) {
         const newCategory = Array.isArray(updatedData.category) ? updatedData.category : [updatedData.category];
@@ -492,12 +503,16 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
     // Set the updatedBy field
     updatedData.updatedBy = req.user._id;
 
+    console.log(updatedData);
+    // console.log(updatedData.);
+
     // Update coupon with updatedData and return the updated coupon
     coupon = await couponModel.findByIdAndUpdate(couponId, updatedData, { new: true });
 
+    console.log(coupon);
+
     return res.status(201).json({ message: 'success', coupon });
 });
-
 
 
 export const updateCouponLike = asyncHandler(async (req, res, next) => {

@@ -17,7 +17,7 @@ export const createCouponValidation = joi.object({
     link: joi.string().min(1).max(200).allow('').custom(validateURL),
     en_description: joi.string().trim().allow('').max(1000), // Optional
     ar_description: joi.string().trim().allow('').max(1000),
-    en_status: joi.string().valid('discount', 'cashback').default('discount').required(),
+    en_status: joi.string().required(),
     ar_status: joi.string().valid('خصم', 'كاش باك').default('خصم').required(),
     amount: joi.number().positive().min(1).max(100),
     expire: joi.string().allow(''),
@@ -47,7 +47,7 @@ export const updateCouponValidation = joi.object({
     link: joi.string().min(1).max(200).allow('').custom(validateURL),
     en_description: joi.string().trim().allow('').max(1000), // Optional
     ar_description: joi.string().trim().allow('').max(1000),
-    en_status: joi.string().valid('discount', 'cashback').default('discount').allow(''),
+    en_status: joi.string().allow(''),
     ar_status: joi.string().valid('خصم', 'كاش باك').default('خصم').allow(''),
     amount: joi.number().positive().min(1).max(100).allow(''),
     expire: joi.date().allow(''),

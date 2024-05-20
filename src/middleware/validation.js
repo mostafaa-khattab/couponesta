@@ -8,12 +8,8 @@ const validateObjectId = (value, helper) => {
 
 export const generalFields = {
 
-    email: joi.string().email({
-        minDomainSegments: 2,
-        maxDomainSegments: 4,
-        tlds: { allow: ['com', 'net', 'co'] }
-    }).required(),
-    password: joi.string().pattern(/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{7,}$/).required(),
+    email: joi.string().email().required(),
+    password: joi.string().required(),
     cPassword: joi.string().required(),
     id: joi.string().custom(validateObjectId).required(),
     idUpdate: joi.string().custom(validateObjectId),

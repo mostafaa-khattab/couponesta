@@ -28,6 +28,7 @@ export const generalFields = {
 
     // })
     file: joi.any().allow(' ')
+    
 }
 
 export const validation = (schema) => {

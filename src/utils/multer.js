@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export const fileValidation = {
-    image: ['image/jpeg', 'image/png', 'image/gif', 'image/apng', 'image/svg+xml', 'image/webp', 'image/bmp', 'image/x-icon', 'image/tiff'],
+    image: ['image/jpeg', 'image/png', 'image/gif', 'image/apng', 'image/svg+xml', 'image/webp', 'image/bmp', 'image/tiff', 'image/x-icon'],
 }
 
 export function fileUpload(customPath = 'general', customValidation = []) {

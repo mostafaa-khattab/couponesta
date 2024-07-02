@@ -8,7 +8,6 @@ const locationSchema = new Schema({
         required: [true, 'name is required'],
         unique: [true, 'name is unique'],
         trim: true,
-        lower: true
     },
 
     locationCode: {
@@ -16,7 +15,6 @@ const locationSchema = new Schema({
         required: [true, 'code is required'],
         unique: [true, 'code is unique'],
         trim: true,
-        lower: true
     },
 
     image: String,

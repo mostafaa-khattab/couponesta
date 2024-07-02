@@ -91,10 +91,12 @@ export const getCoupons = asyncHandler(async (req, res, next) => {
         const couponCount = coupons.length; // Get count of coupons from the array length
 
         return res.status(200).json({ message: 'success', couponCount, coupons });
+
     } catch (error) {
         return res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 export const getFavoriteCoupons = asyncHandler(async (req, res, next) => {
     try {
@@ -609,31 +611,6 @@ cron.schedule('0 0 0 1 */2 *', async () => {
 });
 
 
-export const addFavorite = asyncHandler(async (req, res, next) => {
-
-    const { couponId } = req.params;
-
-    if (!await couponModel.findOne({ _id: couponId, isDeleted: false })) {
-        return next(new Error(`In-valid coupon ID`, { cause: 400 }))
-    }
-
-    await userModel.updateOne({ _id: req.user._id }, { $addToSet: { favorite: couponId } })
-
-    return res.status(201).json({ message: 'succuss' })
-})
-
-export const deleteFromFavorite = asyncHandler(async (req, res, next) => {
-
-    const { couponId } = req.params;
-    if (!await couponModel.findOne({ _id: couponId, isDeleted: false })) {
-        return next(new Error(`In-valid coupon ID`, { cause: 400 }))
-    }
-
-    await userModel.updateOne({ _id: req.user._id }, { $pull: { favorite: couponId } })
-
-    return res.status(201).json({ message: 'succuss' })
-})
-
 
 
 // // is all Date from Database
@@ -659,6 +636,51 @@ export const deleteFromFavorite = asyncHandler(async (req, res, next) => {
 //         notificationCount
 //     });
 // });
+
+
+
+
+export const addFavorite = asyncHandler(async (req, res, next) => {
+    const { couponId } = req.params;
+
+    // Check if the coupon exists and is not deleted
+    const coupon = await couponModel.findOne({ _id: couponId, isDeleted: false });
+    if (!coupon) {
+        return next(new Error('Invalid coupon ID', { cause: 400 }));
+    }
+
+    // Update the user's favorite list
+    await userModel.updateOne({ _id: req.user._id }, { $addToSet: { favorite: couponId } });
+
+    // Update the coupon's isFavorite field
+    coupon.isFavorite = true;
+    await coupon.save();
+
+    return res.status(201).json({ message: 'success', coupon });
+});
+
+export const deleteFromFavorite = asyncHandler(async (req, res, next) => {
+    const { couponId } = req.params;
+
+    // Check if the coupon exists and is not deleted
+    const coupon = await couponModel.findOne({ _id: couponId, isDeleted: false });
+    if (!coupon) {
+        return next(new Error('Invalid coupon ID', { cause: 400 }));
+    }
+
+    // Update the user's favorite list
+    await userModel.updateOne({ _id: req.user._id }, { $pull: { favorite: couponId } });
+
+    // Check if the coupon is still a favorite for any user
+    const isFavoriteForAnyUser = await userModel.exists({ favorite: couponId });
+    if (!isFavoriteForAnyUser) {
+        coupon.isFavorite = false;
+        await coupon.save();
+    }
+
+    return res.status(201).json({ message: 'success', coupon });
+});
+
 
 export const getAllData = asyncHandler(async (req, res, next) => {
     // Get the count of all coupons

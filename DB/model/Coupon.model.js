@@ -34,6 +34,11 @@ const couponSchema = new Schema({
 
     expire: Date,
 
+    isFavorite: {
+        type: Boolean,
+        default: false,
+    },
+
     createdBy: {
         type: Types.ObjectId,
         ref: 'User',

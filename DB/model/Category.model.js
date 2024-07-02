@@ -80,7 +80,7 @@ categorySchema.pre(/^find/, function () {
 
     this.populate('createdBy', 'fullName')
         .populate('updatedBy', 'fullName')
-        .populate('location', 'name locationCode')
+        .populate('location')
 })
 
 const categoryModel = mongoose.models.Category || model("Category", categorySchema)

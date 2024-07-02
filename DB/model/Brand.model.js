@@ -69,10 +69,12 @@ const brandSchema = new Schema({
         }
     ],
 
-    // isFollowed: {
-    //     type: Boolean,
-    //     default: false
-    // },
+    userFollowed: [
+        {
+            type: Types.ObjectId,
+            ref: 'User',
+        }
+    ],
 
     isDeleted: {
         type: Boolean,

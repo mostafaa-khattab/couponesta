@@ -485,23 +485,30 @@ export const addFollow = asyncHandler(async (req, res, next) => {
 
     const { brandId } = req.params;
 
-    if (!await brandModel.findOne({ _id: brandId, isDeleted: false })) {
+    let brand = await brandModel.findOne({ _id: brandId, isDeleted: false })
+
+    if (!brand) {
         return next(new Error(`In-valid brand ID`, { cause: 400 }))
     }
 
     await userModel.updateOne({ _id: req.user._id }, { $addToSet: { follow: brandId } })
 
-    return res.status(201).json({ message: 'succuss' })
+    brand = await brandModel.findByIdAndUpdate(brandId, { $addToSet: { userFollowed: req.user._id } }, { new: true });
+
+    return res.status(201).json({ message: 'succuss', brand })
 })
 
 export const deleteFromFollow = asyncHandler(async (req, res, next) => {
 
     const { brandId } = req.params;
-    if (!await brandModel.findOne({ _id: brandId, isDeleted: false })) {
+    let brand = await brandModel.findOne({ _id: brandId, isDeleted: false })
+    if (!brand) {
         return next(new Error(`In-valid brand ID`, { cause: 400 }))
     }
 
     await userModel.updateOne({ _id: req.user._id }, { $pull: { follow: brandId } })
 
-    return res.status(201).json({ message: 'succuss' })
+    brand = await brandModel.findByIdAndUpdate(brandId, { $pull: { userFollowed: req.user._id } }, { new: true });
+
+    return res.status(201).json({ message: 'succuss', brand })
 })

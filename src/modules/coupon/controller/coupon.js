@@ -640,30 +640,33 @@ cron.schedule('0 0 0 1 */2 *', async () => {
 
 
 
-export const addFavorite = asyncHandler(async (req, res, next) => {
-    const { couponId } = req.params;
+export let addFavorite = asyncHandler(async (req, res, next) => {
+    let { couponId } = req.params;
 
     // Check if the coupon exists and is not deleted
-    const coupon = await couponModel.findOne({ _id: couponId, isDeleted: false });
+    let coupon = await couponModel.findOne({ _id: couponId, isDeleted: false });
     if (!coupon) {
         return next(new Error('Invalid coupon ID', { cause: 400 }));
     }
 
     // Update the user's favorite list
-    await userModel.updateOne({ _id: req.user._id }, { $addToSet: { favorite: couponId } });
+    await userModel.updateOne({ _id: req.user._id }, { $addToSet: { favorite: couponId } }, { new: true });
 
-    // Update the coupon's isFavorite field
-    coupon.isFavorite = true;
-    await coupon.save();
+    // // Update the coupon's isFavorite field
+    // coupon.isFavorite = true;
+    // await coupon.save();
+
+    // Update the user's favorite list
+    coupon = await couponModel.findByIdAndUpdate(couponId, { $addToSet: { userFavorite: req.user._id } }, { new: true });
 
     return res.status(201).json({ message: 'success', coupon });
 });
 
-export const deleteFromFavorite = asyncHandler(async (req, res, next) => {
-    const { couponId } = req.params;
+export let deleteFromFavorite = asyncHandler(async (req, res, next) => {
+    let { couponId } = req.params;
 
     // Check if the coupon exists and is not deleted
-    const coupon = await couponModel.findOne({ _id: couponId, isDeleted: false });
+    let coupon = await couponModel.findOne({ _id: couponId, isDeleted: false });
     if (!coupon) {
         return next(new Error('Invalid coupon ID', { cause: 400 }));
     }
@@ -671,12 +674,14 @@ export const deleteFromFavorite = asyncHandler(async (req, res, next) => {
     // Update the user's favorite list
     await userModel.updateOne({ _id: req.user._id }, { $pull: { favorite: couponId } });
 
-    // Check if the coupon is still a favorite for any user
-    const isFavoriteForAnyUser = await userModel.exists({ favorite: couponId });
-    if (!isFavoriteForAnyUser) {
-        coupon.isFavorite = false;
-        await coupon.save();
-    }
+    // // Check if the coupon is still a favorite for any user
+    // let isFavoriteForAnyUser = await userModel.exists({ favorite: couponId });
+    // if (!isFavoriteForAnyUser) {
+    //     coupon.isFavorite = false;
+    //     await coupon.save();
+    // }
+
+    coupon = await couponModel.findByIdAndUpdate(couponId, { $pull: { userFavorite: req.user._id } }, { new: true });
 
     return res.status(201).json({ message: 'success', coupon });
 });

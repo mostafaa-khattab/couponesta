@@ -452,7 +452,7 @@ export const loginEmail = asyncHandler(async (req, res, next) => {
     }
 
     if (!comparePassword({ plaintext: password, hashValue: user.password })) {
-        return next(new Error("In-valid login date", { cause: 400 }));
+        return next(new Error("In-valid Email or Password", { cause: 400 }));
     }
 
     const access_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
@@ -481,7 +481,7 @@ export const loginPhone = asyncHandler(async (req, res, next) => {
     }
 
     if (!comparePassword({ plaintext: password, hashValue: user.password })) {
-        return next(new Error("In-valid login date", { cause: 400 }));
+        return next(new Error("In-valid Phone Number or Password", { cause: 400 }));
     }
 
     const access_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes

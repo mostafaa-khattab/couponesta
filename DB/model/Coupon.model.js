@@ -34,10 +34,17 @@ const couponSchema = new Schema({
 
     expire: Date,
 
-    isFavorite: {
-        type: Boolean,
-        default: false,
-    },
+    // isFavorite: {
+    //     type: Boolean,
+    //     default: false,
+    // },
+
+    userFavorite: [
+        {
+            type: Types.ObjectId,
+            ref: 'User',
+        }
+    ],
 
     createdBy: {
         type: Types.ObjectId,

@@ -33,7 +33,7 @@ export const getAllBrandsToDashboard = asyncHandler(async (req, res, next) => {
     });
 
 
-    return res.status(200).json({ message: 'succuss', brand })
+    return res.status(200).json({ message: 'success', brand })
 })
 
 
@@ -70,7 +70,7 @@ export const getAllBrandsToDashboard = asyncHandler(async (req, res, next) => {
 //     });
 
 
-//     return res.status(200).json({ message: 'succuss', brand })
+//     return res.status(200).json({ message: 'success', brand })
 // })
 
 export const getBrands = asyncHandler(async (req, res, next) => {
@@ -448,7 +448,7 @@ export const getBrandsDeleted = asyncHandler(async (req, res, next) => {
         brand[index].description = description;
     });
 
-    return res.status(200).json({ message: 'succuss', brand })
+    return res.status(200).json({ message: 'success', brand })
 })
 
 
@@ -495,7 +495,7 @@ export const addFollow = asyncHandler(async (req, res, next) => {
 
     brand = await brandModel.findByIdAndUpdate(brandId, { $addToSet: { userFollowed: req.user._id } }, { new: true });
 
-    return res.status(201).json({ message: 'succuss', brand })
+    return res.status(201).json({ message: 'success', brand })
 })
 
 export const deleteFromFollow = asyncHandler(async (req, res, next) => {
@@ -510,5 +510,5 @@ export const deleteFromFollow = asyncHandler(async (req, res, next) => {
 
     brand = await brandModel.findByIdAndUpdate(brandId, { $pull: { userFollowed: req.user._id } }, { new: true });
 
-    return res.status(201).json({ message: 'succuss', brand })
+    return res.status(201).json({ message: 'success', brand })
 })

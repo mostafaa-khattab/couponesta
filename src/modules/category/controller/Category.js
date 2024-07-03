@@ -28,7 +28,7 @@ export const getAllCategoriesToDashboard = asyncHandler(async (req, res, next) =
         }
     });
 
-    return res.status(200).json({ message: 'succuss', category })
+    return res.status(200).json({ message: 'success', category })
 })
 
 
@@ -67,7 +67,7 @@ export const getAllCategoriesToDashboard = asyncHandler(async (req, res, next) =
 //     });
 
 
-//     return res.status(200).json({ message: 'succuss', category })
+//     return res.status(200).json({ message: 'success', category })
 // })
 
 export const getCategories = asyncHandler(async (req, res, next) => {
@@ -442,7 +442,7 @@ export const getCategoriesDeleted = asyncHandler(async (req, res, next) => {
         category[index].slug = slug;
     });
 
-    return res.status(200).json({ message: 'succuss', category })
+    return res.status(200).json({ message: 'success', category })
 })
 
 

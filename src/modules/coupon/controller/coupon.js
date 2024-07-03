@@ -26,7 +26,7 @@ export const getAllCouponsToDashboard = asyncHandler(async (req, res, next) => {
 
     const coupon = await apiFeature.mongooseQuery
 
-    return res.status(200).json({ message: 'succuss', coupon })
+    return res.status(200).json({ message: 'success', coupon })
 })
 
 
@@ -59,7 +59,7 @@ export const getAllCouponsToDashboard = asyncHandler(async (req, res, next) => {
 //     });
 
 
-//     return res.status(200).json({ message: 'succuss', coupon })
+//     return res.status(200).json({ message: 'success', coupon })
 // })
 
 export const getCoupons = asyncHandler(async (req, res, next) => {
@@ -391,7 +391,7 @@ export const createCoupon = asyncHandler(async (req, res, next) => {
 
 //     coupon = await couponModel.findByIdAndUpdate(couponId, req.body, { new: true })
 
-//     return res.status(201).json({ message: 'succuss', coupon })
+//     return res.status(201).json({ message: 'success', coupon })
 
 // })
 
@@ -540,7 +540,7 @@ export const updateCouponLike = asyncHandler(async (req, res, next) => {
         { new: true })
 
     return res.status(201).json({
-        message: 'succuss', coupon: {
+        message: 'success', coupon: {
             usedCount,
             likeCount,
             dislikeCount,
@@ -593,7 +593,7 @@ export const getCouponsDeleted = asyncHandler(async (req, res, next) => {
         coupon[index].description = description;
     });
 
-    return res.status(200).json({ message: 'succuss', coupon })
+    return res.status(200).json({ message: 'success', coupon })
 })
 
 // Schedule a job to delete couponModel older than 60 days

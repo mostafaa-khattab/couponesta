@@ -29,7 +29,7 @@ export const getLocations = asyncHandler(async (req, res, next) => {
     });
 
 
-    return res.status(200).json({ message: 'succuss', location })
+    return res.status(200).json({ message: 'success', location })
 })
 
 
@@ -59,7 +59,7 @@ export const createLocation = asyncHandler(async (req, res, next) => {
     console.log(image);
     console.log(location);
 
-    return res.status(201).json({ message: 'succuss', location })
+    return res.status(201).json({ message: 'success', location })
 
 })
 
@@ -128,7 +128,7 @@ export const updateLocation = asyncHandler(async (req, res, next) => {
         location.image = "https://mostafa-e-commerce.onrender.com/" + location.image;
     }
 
-    return res.status(201).json({ message: 'succuss', location })
+    return res.status(201).json({ message: 'success', location })
 
 })
 
@@ -185,7 +185,7 @@ export const getLocationsDeleted = asyncHandler(async (req, res, next) => {
 
     });
 
-    return res.status(200).json({ message: 'succuss', location })
+    return res.status(200).json({ message: 'success', location })
 })
 
 

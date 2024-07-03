@@ -91,7 +91,7 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
         }
     });
 
-    return res.status(200).json({ message: 'succuss', users })
+    return res.status(200).json({ message: 'success', users })
 })
 
 export const getLoggedUser = asyncHandler(async (req, res, next) => {
@@ -122,7 +122,7 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
         }
     });
 
-    return res.status(200).json({ message: 'succuss', user })
+    return res.status(200).json({ message: 'success', user })
 })
 
 
@@ -601,7 +601,7 @@ export const getUsersDeleted = asyncHandler(async (req, res, next) => {
         }
     });
 
-    return res.status(200).json({ message: 'succuss', user })
+    return res.status(200).json({ message: 'success', user })
 })
 
 

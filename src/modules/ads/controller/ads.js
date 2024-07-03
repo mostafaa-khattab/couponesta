@@ -30,7 +30,7 @@ export const getAds = asyncHandler(async (req, res, next) => {
     });
 
 
-    return res.status(200).json({ message: 'succuss', ads })
+    return res.status(200).json({ message: 'success', ads })
 })
 
 
@@ -75,7 +75,7 @@ export const createAds = asyncHandler(async (req, res, next) => {
         ads.image = "https://mostafa-e-commerce.onrender.com/" + ads.image;
     }
 
-    return res.status(201).json({ message: 'succuss', ads })
+    return res.status(201).json({ message: 'success', ads })
 
 })
 
@@ -203,7 +203,7 @@ export const getAdsDeleted = asyncHandler(async (req, res, next) => {
 
     });
 
-    return res.status(200).json({ message: 'succuss', ads })
+    return res.status(200).json({ message: 'success', ads })
 })
 
 

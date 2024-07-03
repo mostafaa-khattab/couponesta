@@ -19,7 +19,7 @@ export const getNotificationsToDashboard = asyncHandler(async (req, res, next) =
 
     const notification = await apiFeature.mongooseQuery
 
-    return res.status(200).json({ message: 'succuss', notification })
+    return res.status(200).json({ message: 'success', notification })
 
 })
 
@@ -38,7 +38,7 @@ export const getSpacialNotificationToDashboard = asyncHandler(async (req, res, n
 
     const notification = await apiFeature.mongooseQuery
 
-    return res.status(200).json({ message: 'succuss', notification })
+    return res.status(200).json({ message: 'success', notification })
 
 })
 
@@ -70,7 +70,7 @@ export const getNotifications = asyncHandler(async (req, res, next) => {
         notification[index].body = body;
     });
 
-    return res.status(200).json({ message: 'succuss', notification })
+    return res.status(200).json({ message: 'success', notification })
 
 })
 
@@ -102,7 +102,7 @@ export const getSpacialNotification = asyncHandler(async (req, res, next) => {
         notification[index].body = body;
     });
 
-    return res.status(200).json({ message: 'succuss', notification })
+    return res.status(200).json({ message: 'success', notification })
 
 })
 
@@ -265,7 +265,7 @@ export const getNotificationsDeleted = asyncHandler(async (req, res, next) => {
     });
 
 
-    return res.status(200).json({ message: 'succuss', notification })
+    return res.status(200).json({ message: 'success', notification })
 })
 
 // Schedule a job to delete notificationModel older than 60 days

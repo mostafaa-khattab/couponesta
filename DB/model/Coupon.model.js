@@ -46,6 +46,22 @@ const couponSchema = new Schema({
         }
     ],
 
+    userLiked: [
+        {
+            type: Types.ObjectId,
+            ref: 'User',
+        }
+    ],
+
+    userDisLiked: [
+        {
+            type: Types.ObjectId,
+            ref: 'User',
+        }
+    ],
+
+
+
     createdBy: {
         type: Types.ObjectId,
         ref: 'User',
@@ -118,7 +134,7 @@ couponSchema.pre(/^find/, function () {
         .populate('updatedBy', 'fullName')
         .populate('location', 'name locationCode')
         .populate('category', 'name slug image icon')
-        .populate('brand', 'name slug link image')
+        .populate('brand', 'name slug link image userFollowed')
 
 })
 

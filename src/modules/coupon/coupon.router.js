@@ -53,6 +53,19 @@ router.patch('/:couponId/favorite/remove',
     validation(validators.favoriteValidation),
     couponController.deleteFromFavorite)
 
+router.patch('/:couponId/like/add',
+    auth([roles.User, roles.Admin]),
+    validation(validators.favoriteValidation),
+    couponController.addLike)
+
+router.patch('/:couponId/like/remove',
+    auth([roles.User, roles.Admin]),
+    validation(validators.favoriteValidation),
+    couponController.removeLike)
+
+router.patch('/:couponId/addUseCount',
+    couponController.addUseCount)
+
 // get all coupons
 router.get('/allCount/database',
     couponController.getAllData)

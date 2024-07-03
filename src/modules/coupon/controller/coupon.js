@@ -713,3 +713,96 @@ export const getAllData = asyncHandler(async (req, res, next) => {
     });
 });
 
+export let addLike = asyncHandler(async (req, res, next) => {
+    let { couponId } = req.params;
+
+    // Check if the coupon exists and is not deleted
+    let coupon = await couponModel.findOne({ _id: couponId, isDeleted: false });
+    if (!coupon) {
+        return next(new Error('Invalid coupon ID', { cause: 400 }));
+    }
+
+    // Check if the user has already liked the coupon
+    const userHasLiked = coupon.userLiked.includes(req.user._id);
+
+    if (!userHasLiked) {
+
+        const userHasDisliked = coupon.userDisLiked.includes(req.user._id);
+
+        // Update the coupon's userLiked list and increment the likeCount
+        coupon = await couponModel.findByIdAndUpdate(
+            couponId,
+            {
+                $addToSet: { userLiked: req.user._id },
+                $pull: { userDisLiked: req.user._id },
+                $inc: {
+                    likeCount: 1,
+                    dislikeCount: userHasDisliked ? -1 : 0
+                }
+            },
+            { new: true }
+        );
+    }
+
+    return res.status(201).json({ message: 'success', coupon });
+});
+
+
+export let removeLike = asyncHandler(async (req, res, next) => {
+    let { couponId } = req.params;
+
+    // Check if the coupon exists and is not deleted
+    let coupon = await couponModel.findOne({ _id: couponId, isDeleted: false });
+    if (!coupon) {
+        return next(new Error('Invalid coupon ID', { cause: 400 }));
+    }
+
+    // Check if the user has already disliked the coupon
+    const userHasDisliked = coupon.userDisLiked.includes(req.user._id);
+
+    if (!userHasDisliked) {
+
+        const userHasLiked = coupon.userLiked.includes(req.user._id);
+
+
+        // Update the coupon's userLiked list and increment the likeCount
+        coupon = await couponModel.findByIdAndUpdate(
+            couponId,
+            {
+                $pull: { userLiked: req.user._id },
+                $addToSet: { userDisLiked: req.user._id },
+                $inc: {
+                    dislikeCount: 1,
+                    likeCount: userHasLiked ? -1 : 0
+                }
+            },
+            { new: true }
+        );
+    }
+
+    return res.status(201).json({ message: 'success', coupon });
+});
+
+
+
+
+export let addUseCount = asyncHandler(async (req, res, next) => {
+    let { couponId } = req.params;
+
+    // Check if the coupon exists and is not deleted
+    let coupon = await couponModel.findOne({ _id: couponId, isDeleted: false });
+    if (!coupon) {
+        return next(new Error('Invalid coupon ID', { cause: 400 }));
+    }
+
+    // Update the coupon's userLiked list and increment the likeCount
+    coupon = await couponModel.findByIdAndUpdate(
+        couponId,
+        {
+            $inc: { usedCount: 1 }
+        },
+        { new: true }
+    );
+
+    return res.status(201).json({ message: 'success', coupon });
+});

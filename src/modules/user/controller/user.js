@@ -23,7 +23,7 @@ export const getAllUserFollowToDashboard = asyncHandler(async (req, res, next) =
 
     userFollow.follow?.forEach((coup, index) => {
 
-        userFollow.follow[index].image = "https://mostafa-e-commerce.onrender.com/" + coup.image
+        userFollow.follow[index].image = "https://saraha-seej.onrender.com/" + coup.image
     })
 
     !userFollow && next(new AppError(`user follow not found`, 404))
@@ -54,7 +54,7 @@ export const getAllUserFollow = asyncHandler(async (req, res, next) => {
 
     userFollow.follow?.forEach((coup, index) => {
 
-        userFollow.follow[index].image = "https://mostafa-e-commerce.onrender.com/" + coup.image
+        userFollow.follow[index].image = "https://saraha-seej.onrender.com/" + coup.image
         coup.name = coup.name[`${locale}`] || `coupons- ${locale}`
         coup.description = coup.description[`${locale}`] || `coupons- ${locale}`
     })
@@ -87,7 +87,7 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
     users?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            users[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            users[index].image = "https://saraha-seej.onrender.com/" + elm.image;
         }
     });
 
@@ -118,7 +118,7 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
     user?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            user[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            user[index].image = "https://saraha-seej.onrender.com/" + elm.image;
         }
     });
 
@@ -170,7 +170,7 @@ export const addUser = asyncHandler(async (req, res, next) => {
                                     </h1>
                                 </td>
                                 <td>
-                                    <p style="text-align: right;"><a href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
+                                    <p style="text-align: right;"><a href="${"https://saraha-seej.onrender.com/"}" target="_blank"
                                             style="text-decoration: none;">View In Website</a></p>
                                 </td>
                             </tr>
@@ -289,7 +289,7 @@ export const addUser = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (user.image) {
-        user.image = "https://mostafa-e-commerce.onrender.com/" + user.image;
+        user.image = "https://saraha-seej.onrender.com/" + user.image;
     }
 
     return res.status(201).json({ message: "success", user })
@@ -346,7 +346,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
                                     </h1>
                                 </td>
                                 <td>
-                                    <p style="text-align: right;"><a href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
+                                    <p style="text-align: right;"><a href="${"https://saraha-seej.onrender.com/"}" target="_blank"
                                             style="text-decoration: none;">View In Website</a></p>
                                 </td>
                             </tr>
@@ -523,7 +523,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (updatedUser.image) {
-        updatedUser.image = "https://mostafa-e-commerce.onrender.com/" + updatedUser.image;
+        updatedUser.image = "https://saraha-seej.onrender.com/" + updatedUser.image;
     }
 
 
@@ -597,7 +597,7 @@ export const getUsersDeleted = asyncHandler(async (req, res, next) => {
     user?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            user[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            user[index].image = "https://saraha-seej.onrender.com/" + elm.image;
         }
     });
 

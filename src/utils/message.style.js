@@ -27,7 +27,7 @@ export const sendCodeStyle = (link, userName = "Couponesta") => {
                                             </td>
                                             <td style="width: 200px ;">
                                                 <p style="text-align: center; font-size: large;"><a
-                                                        href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
+                                                        href="${"https://saraha-seej.onrender.com/"}" target="_blank"
                                                         style="text-decoration: none;">View In
                                                         Website</a></>
                                             </td>
@@ -122,7 +122,7 @@ export const confirmAccountStyle = (link) => {
                                             </h1>
                                         </td>
                                         <td>
-                                            <p style="text-align: right;"><a href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
+                                            <p style="text-align: right;"><a href="${"https://saraha-seej.onrender.com/"}" target="_blank"
                                         style="text-decoration: none;">View In Website</a></p>
                                     </td>
                                 </tr>

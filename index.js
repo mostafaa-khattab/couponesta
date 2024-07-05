@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 
 //  to walkUp sever
 // Define the URL to call
-const url = 'https://mostafa-e-commerce.onrender.com/' || process.env.BASE_URL
+const url = 'https://saraha-seej.onrender.com/' || process.env.BASE_URL
 
 // Define options for the HTTP request
 const options = {

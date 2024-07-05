@@ -118,7 +118,7 @@ export const getFavoriteCoupons = asyncHandler(async (req, res, next) => {
         // Update image URLs if available
         const updatedCoupons = localizedCoupons.map(coupon => {
             if (coupon.image) {
-                coupon.image = "https://mostafa-e-commerce.onrender.com/" + coupon.image;
+                coupon.image = "https://saraha-seej.onrender.com/" + coupon.image;
             }
             return coupon;
         });

@@ -27,7 +27,7 @@ export const getAllBrandsToDashboard = asyncHandler(async (req, res, next) => {
     brand?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            brand[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            brand[index].image = "https://saraha-seej.onrender.com/" + elm.image;
         }
 
     });
@@ -57,7 +57,7 @@ export const getAllBrandsToDashboard = asyncHandler(async (req, res, next) => {
 //     brand?.forEach((elm, index) => {
 //         // Check if image exists and update its URL
 //         if (elm.image) {
-//             brand[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+//             brand[index].image = "https://saraha-seej.onrender.com/" + elm.image;
 //         }
 
 //         // Set name and description based on locale
@@ -92,7 +92,7 @@ export const getBrands = asyncHandler(async (req, res, next) => {
         brands.forEach((elm, index) => {
             // Check if image exists and update its URL
             if (elm.image) {
-                brands[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+                brands[index].image = "https://saraha-seej.onrender.com/" + elm.image;
             }
 
             // Set name and description based on locale
@@ -134,7 +134,7 @@ export const getFovouriteBrands = asyncHandler(async (req, res, next) => {
         // Update image URLs if available
         const updatedBrands = localizedBrands.map(brand => {
             if (brand.image) {
-                brand.image = "https://mostafa-e-commerce.onrender.com/" + brand.image;
+                brand.image = "https://saraha-seej.onrender.com/" + brand.image;
             }
             return brand;
         });
@@ -232,7 +232,7 @@ export const createBrand = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (brand.image) {
-        brand.image = "https://mostafa-e-commerce.onrender.com/" + brand.image;
+        brand.image = "https://saraha-seej.onrender.com/" + brand.image;
     }
 
     return res.status(201).json({ message: 'success', brand });
@@ -353,7 +353,7 @@ export const updateBrand = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (brand.image) {
-        brand.image = "https://mostafa-e-commerce.onrender.com/" + brand.image;
+        brand.image = "https://saraha-seej.onrender.com/" + brand.image;
     }
 
     return res.status(201).json({ message: 'success', brand });
@@ -436,7 +436,7 @@ export const getBrandsDeleted = asyncHandler(async (req, res, next) => {
     brand?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            brand[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            brand[index].image = "https://saraha-seej.onrender.com/" + elm.image;
         }
 
         // Set name and description based on locale
@@ -493,7 +493,12 @@ export const addFollow = asyncHandler(async (req, res, next) => {
 
     await userModel.updateOne({ _id: req.user._id }, { $addToSet: { follow: brandId } })
 
-    brand = await brandModel.findByIdAndUpdate(brandId, { $addToSet: { userFollowed: req.user._id } }, { new: true });
+    brand = await brandModel.findByIdAndUpdate(brandId,
+        {
+            $addToSet: { userFollowed: req.user._id },
+            $inc: { mostUsed: 1, mostFollowed: 1 },
+        },
+        { new: true });
 
     return res.status(201).json({ message: 'success', brand })
 })
@@ -508,7 +513,19 @@ export const deleteFromFollow = asyncHandler(async (req, res, next) => {
 
     await userModel.updateOne({ _id: req.user._id }, { $pull: { follow: brandId } })
 
-    brand = await brandModel.findByIdAndUpdate(brandId, { $pull: { userFollowed: req.user._id } }, { new: true });
+    brand = await brandModel.findByIdAndUpdate(brandId,
+        {
+            $pull: { userFollowed: req.user._id },
+
+            $inc: { mostUsed: -1, mostFollowed: -1 },
+
+        },
+        { new: true });
+
+    brand.mostUsed = brand.mostUsed <= 0 ? 0 : brand.mostUsed
+    brand.mostFollowed = brand.mostFollowed <= 0 ? 0 : brand.mostFollowed
+
+    await brand.save()
 
     return res.status(201).json({ message: 'success', brand })
 })

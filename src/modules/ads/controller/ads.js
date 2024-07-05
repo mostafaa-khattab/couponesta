@@ -24,7 +24,7 @@ export const getAds = asyncHandler(async (req, res, next) => {
     ads?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            ads[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            ads[index].image = "https://saraha-seej.onrender.com/" + elm.image;
         }
 
     });
@@ -72,7 +72,7 @@ export const createAds = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (ads.image) {
-        ads.image = "https://mostafa-e-commerce.onrender.com/" + ads.image;
+        ads.image = "https://saraha-seej.onrender.com/" + ads.image;
     }
 
     return res.status(201).json({ message: 'success', ads })
@@ -147,7 +147,7 @@ export const updateAds = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (ads.image) {
-        ads.image = "https://mostafa-e-commerce.onrender.com/" + ads.image;
+        ads.image = "https://saraha-seej.onrender.com/" + ads.image;
     }
 
     return res.status(201).json({ message: 'success', ads });
@@ -198,7 +198,7 @@ export const getAdsDeleted = asyncHandler(async (req, res, next) => {
     ads?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm?.image) {
-            ads[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            ads[index].image = "https://saraha-seej.onrender.com/" + elm.image;
         }
 
     });

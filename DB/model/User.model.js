@@ -42,9 +42,10 @@ const userSchema = new Schema({
 
     confirmAccount: {
         type: Boolean,
-        default: false,
+        default: true,
     },
 
+    
     status: {
         type: String,
         default: "offline",

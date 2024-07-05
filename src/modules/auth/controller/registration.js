@@ -43,8 +43,8 @@ export const loginWithGmail = asyncHandler(async (req, res, next) => {
 
         }
 
-        const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
-        const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+        const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName } }) // 30 minutes
+        const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName } }) // 1 year
 
         user.status = "online"
         await user.save()
@@ -70,8 +70,8 @@ export const loginWithGmail = asyncHandler(async (req, res, next) => {
         confirmAccount: true
     })
 
-    const access_token = generateToken({ payload: { id: newUser._id, email: newUser.email, role: newUser.role, fullName: newUser.fullName }, expiresIn: 30 * 60 }) // 30 minutes
-    const refresh_token = generateToken({ payload: { id: newUser._id, email: newUser.email, role: newUser.role, fullName: newUser.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+    const access_token = generateToken({ payload: { id: newUser._id, email: newUser.email, role: newUser.role, fullName: newUser.fullName } }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: newUser._id, email: newUser.email, role: newUser.role, fullName: newUser.fullName } }) // 1 year
 
     return res.status(201).json({ message: "success", type: "signUp", access_token, refresh_token })
 
@@ -88,8 +88,8 @@ export const signupEmail = asyncHandler(async (req, res, next) => {
     }
 
     // send email
-    const token = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 5 })
-    const refreshToken = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 60 * 24 })
+    const token = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com" })
+    const refreshToken = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com" })
 
     const link = `${req.protocol}://${req.headers.host}/auth/confirmAccount/${token}`
     const rfLink = `${req.protocol}://${req.headers.host}/auth/NewconfirmAccount/${refreshToken}`
@@ -119,7 +119,7 @@ export const signupEmail = asyncHandler(async (req, res, next) => {
                                 </h1>
                             </td>
                             <td>
-                                <p style="text-align: right;"><a href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
+                                <p style="text-align: right;"><a href="${"https://saraha-seej.onrender.com/"}" target="_blank"
                                         style="text-decoration: none;">View In Website</a></p>
                             </td>
                         </tr>
@@ -220,8 +220,8 @@ export const signupEmail = asyncHandler(async (req, res, next) => {
     // save
     const user = await userModel.create({ fullName, email, password: hashPassword, joined: Date.now() })
 
-    const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
-    const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+    const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName } }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName } }) // 1 year
 
     user.status = "online"
     await user.save()
@@ -258,8 +258,8 @@ export const signupPhone = asyncHandler(async (req, res, next) => {
         confirmAccount: true
     })
 
-    const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
-    const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+    const access_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName } }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: user._id, role: user.role, fullName: user.fullName } }) // 1 year
 
     user.status = "online"
     await user.save()
@@ -304,7 +304,7 @@ export const RequestNewconfirmAccount = asyncHandler(async (req, res, next) => {
 
     }
 
-    const newToken = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com", expiresIn: 60 * 2 })
+    const newToken = generateToken({ payload: { email }, signature: "saving-coupons-signature by khattab@gmail.com" })
 
     const link = `${req.protocol}://${req.headers.host}/auth/confirmAccount/${newToken}`
     const rfLink = `${req.protocol}://${req.headers.host}/auth/NewconfirmAccount/${token}`
@@ -335,7 +335,7 @@ export const RequestNewconfirmAccount = asyncHandler(async (req, res, next) => {
                                 </h1>
                             </td>
                             <td>
-                                <p style="text-align: right;"><a href="${"https://mostafa-e-commerce.onrender.com/"}" target="_blank"
+                                <p style="text-align: right;"><a href="${"https://saraha-seej.onrender.com/"}" target="_blank"
                                         style="text-decoration: none;">View In Website</a></p>
                             </td>
                         </tr>
@@ -455,8 +455,8 @@ export const loginEmail = asyncHandler(async (req, res, next) => {
         return next(new Error("In-valid Email or Password", { cause: 400 }));
     }
 
-    const access_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
-    const refresh_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+    const access_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName } }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName } }) // 1 year
 
     user.status = "online"
     await user.save()
@@ -484,8 +484,8 @@ export const loginPhone = asyncHandler(async (req, res, next) => {
         return next(new Error("In-valid Phone Number or Password", { cause: 400 }));
     }
 
-    const access_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 30 * 60 }) // 30 minutes
-    const refresh_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName }, expiresIn: 60 * 60 * 24 * 365 }) // 1 year
+    const access_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName } }) // 30 minutes
+    const refresh_token = generateToken({ payload: { id: user._id, email: user.email, role: user.role, fullName: user.fullName } }) // 1 year
 
     user.status = "online"
     await user.save()

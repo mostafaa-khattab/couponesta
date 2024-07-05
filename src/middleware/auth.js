@@ -39,12 +39,12 @@ export const auth = (accessRoles = []) => {
         }
 
         if (user.status == "blocked") return next(new Error("user doesn't exist cause it blocked account", { cause: 403 }))
-        if (user.confirmAccount == false) return next(new Error("Plz confirm your email first", { cause: 409 }))
+        // if (user.confirmAccount == false) return next(new Error("Plz confirm your email first", { cause: 409 }))
 
-        if (parseInt(user?.changePasswordTime?.getTime() / 1000) > decoded.iat) {
+        // if (parseInt(user?.changePasswordTime?.getTime() / 1000) > decoded.iat) {
 
-            return next(new Error(`Expire token`, { cause: 401 }))
-        }
+        //     return next(new Error(`Expire token`, { cause: 401 }))
+        // }
 
         if (!accessRoles.includes(user.role)) {
             return next(new Error(`Not authorized account U are ${user.role}`, { cause: 403 }))

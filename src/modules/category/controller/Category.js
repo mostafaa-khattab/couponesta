@@ -24,7 +24,7 @@ export const getAllCategoriesToDashboard = asyncHandler(async (req, res, next) =
     category?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            category[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            category[index].image = "https://saraha-seej.onrender.com/" + elm.image;
         }
     });
 
@@ -52,7 +52,7 @@ export const getAllCategoriesToDashboard = asyncHandler(async (req, res, next) =
 //     category?.forEach((elm, index) => {
 //         // Check if image exists and update its URL
 //         if (elm.image) {
-//             category[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+//             category[index].image = "https://saraha-seej.onrender.com/" + elm.image;
 //         }
 
 //         // Set name and description based on locale
@@ -89,7 +89,7 @@ export const getCategories = asyncHandler(async (req, res, next) => {
         categories.forEach((elm, index) => {
             // Check if image exists and update its URL
             if (elm.image) {
-                categories[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+                categories[index].image = "https://saraha-seej.onrender.com/" + elm.image;
             }
 
             // Set name, description, and slug based on locale
@@ -174,7 +174,7 @@ export const createCategory = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (category.image) {
-        category.image = "https://mostafa-e-commerce.onrender.com/" + category.image;
+        category.image = "https://saraha-seej.onrender.com/" + category.image;
     }
 
     return res.status(201).json({ message: 'success', category });
@@ -271,7 +271,7 @@ export const createCategory = asyncHandler(async (req, res, next) => {
 
 //     // Append BASE_URL to the image field
 //     if (category.image) {
-//         category.image = "https://mostafa-e-commerce.onrender.com/" + category.image;
+//         category.image = "https://saraha-seej.onrender.com/" + category.image;
 //     }
 
 
@@ -373,7 +373,7 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
 
     // Append BASE_URL to the image field
     if (category.image) {
-        category.image = "https://mostafa-e-commerce.onrender.com/" + category.image;
+        category.image = "https://saraha-seej.onrender.com/" + category.image;
     }
 
     return res.status(200).json({ message: 'success', category });
@@ -428,7 +428,7 @@ export const getCategoriesDeleted = asyncHandler(async (req, res, next) => {
     category?.forEach((elm, index) => {
         // Check if image exists and update its URL
         if (elm.image) {
-            category[index].image = "https://mostafa-e-commerce.onrender.com/" + elm.image;
+            category[index].image = "https://saraha-seej.onrender.com/" + elm.image;
         }
 
         // Set name and description based on locale

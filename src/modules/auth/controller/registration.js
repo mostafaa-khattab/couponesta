@@ -52,6 +52,7 @@ export const loginWithGmail = asyncHandler(async (req, res, next) => {
         return res.status(201).json({ message: "success", type: "login", access_token, refresh_token })
 
     }
+
     // sign Up user
 
     // hash password
@@ -461,7 +462,7 @@ export const loginEmail = asyncHandler(async (req, res, next) => {
     user.status = "online"
     await user.save()
 
-    return res.status(201).json({ message: "success", access_token, refresh_token })
+    return res.status(201).json({ message: "success", user, access_token, refresh_token })
 
 })
 
@@ -490,7 +491,7 @@ export const loginPhone = asyncHandler(async (req, res, next) => {
     user.status = "online"
     await user.save()
 
-    return res.status(201).json({ message: "success", access_token, refresh_token })
+    return res.status(201).json({ message: "success", user, access_token, refresh_token })
 
 })
 

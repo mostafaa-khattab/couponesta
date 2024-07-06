@@ -108,7 +108,6 @@ export const getSpacialNotification = asyncHandler(async (req, res, next) => {
 
 
 export const createNotification = asyncHandler(async (req, res, next) => {
-
     // Extract English and Arabic headers and body from request body
     const { en_header, ar_header, en_body, ar_body, user } = req.body;
 
@@ -116,13 +115,11 @@ export const createNotification = asyncHandler(async (req, res, next) => {
     const enHeader = en_header.toLowerCase();
     const arHeader = ar_header.toLowerCase();
 
-    // Check each user ID in the array
-    if (!Array.isArray(user)) {
-        // Convert to array if it's not already
-        user = [user];
-    }
+    // Ensure user is an array
+    let users = Array.isArray(user) ? user : [user];
 
-    for (const userId of user) {
+    // Check each user ID in the array
+    for (const userId of users) {
         // Check if the ID exists in the database
         const checkUser = await userModel.findById(userId);
         if (!checkUser) {
@@ -140,24 +137,30 @@ export const createNotification = asyncHandler(async (req, res, next) => {
             en: en_body,
             ar: ar_body
         },
-        user,
+        user: users,
         createdBy: req.user._id
     });
 
+    // Update each user with the new notification ID
+    for (const userId of users) {
+        await userModel.updateOne(
+            { _id: userId },
+            { $addToSet: { notification: notification._id } },
+            { new: true }
+        );
+    }
 
     return res.status(201).json({ message: 'success', notification });
+});
 
-})
 
 
 export const updateNotification = asyncHandler(async (req, res, next) => {
-
-
     const { notificationId } = req.params;
 
-    let notification = await notificationModel.findOne({ _id: notificationId})
+    let notification = await notificationModel.findOne({ _id: notificationId });
     if (!notification) {
-        return next(new Error(`In-valid notification ID`, { cause: 400 }))
+        return next(new Error(`Invalid notification ID`, { cause: 400 }));
     }
 
     const { en_header, ar_header, en_body, ar_body, user } = req.body;
@@ -166,16 +169,16 @@ export const updateNotification = asyncHandler(async (req, res, next) => {
         let newEnHead = en_header ? en_header.toLowerCase() : notification.header.en;
         let newArHead = ar_header ? ar_header.toLowerCase() : notification.header.ar;
 
-        notification.header.en = newEnHead
-        notification.header.ar = newArHead
+        notification.header.en = newEnHead;
+        notification.header.ar = newArHead;
     }
 
     if (en_body || ar_body) {
         let newEnBody = en_body ? en_body.toLowerCase() : notification.body.en;
         let newArBody = ar_body ? ar_body.toLowerCase() : notification.body.ar;
 
-        notification.body.en = newEnBody
-        notification.body.ar = newArBody
+        notification.body.en = newEnBody;
+        notification.body.ar = newArBody;
     }
 
     // Update user if provided
@@ -199,15 +202,21 @@ export const updateNotification = asyncHandler(async (req, res, next) => {
             return res.status(404).json({ error: `Not found these user IDs: ${nonExistingUsers.join(', ')}` });
         }
 
-        // Add new user IDs to the notification
-        await notificationModel.findByIdAndUpdate(notificationId, { $each: { user: { $addToSet: newUsers } } });
+        // Update the notification's user field
+        await notificationModel.findByIdAndUpdate(notificationId, { $addToSet: { user: { $each: newUsers } } });
+
+        // Update each user with the notification ID if not already present
+        for (const userId of newUsers) {
+            await userModel.updateOne(
+                { _id: userId },
+                { $addToSet: { notification: notificationId } },
+                { new: true }
+            );
+        }
 
         // Update req.body.user with the new user IDs
         req.body.user = newUsers;
-
     }
-
-
 
     req.body.updatedBy = req.user._id;
 
@@ -215,9 +224,7 @@ export const updateNotification = asyncHandler(async (req, res, next) => {
     const updatedNotification = await notificationModel.findByIdAndUpdate(notificationId, req.body, { new: true });
 
     return res.status(201).json({ message: 'Success', notification: updatedNotification });
-
-
-})
+});
 
 
 export const deleteNotification = asyncHandler(async (req, res, next) => {

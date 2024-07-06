@@ -140,75 +140,58 @@ export const getFavoriteCoupons = asyncHandler(async (req, res, next) => {
 
 
 export const createCoupon = asyncHandler(async (req, res, next) => {
+    if ((new Date(req.body.expire)) < (new Date())) return res.status(400).json({ message: "Invalid Date" });
 
-    if ((new Date(req.body.expire)) < (new Date())) return res.status(400).json({ message: "In-valid Date" })
-
-    // Extract English and Arabic names and descriptions from request body
+    // Extract English and Arabic descriptions and statuses from request body
     let { brand, category, location, en_description, ar_description, en_status, ar_status } = req.body;
 
     if (req.body.code) {
         req.body.code = req.body.code.toLowerCase();
-
         req.body.qrCode = await QRCode.toDataURL(req.body.code);
 
         const checkCoupon = await couponModel.findOne({ code: req.body.code, isDeleted: false });
         if (checkCoupon) {
             return next(new Error(`Duplicate coupon code ${req.body.code}`, { cause: 409 }));
         }
-
     }
 
     // Check each category ID in the array
     if (!Array.isArray(category)) {
-        // Convert to array if it's not already
         category = [category];
     }
 
     for (const categoryId of category) {
-        // Check if the ID exists in the database
         const checkCategory = await categoryModel.findById(categoryId);
         if (!checkCategory) {
             return next(new Error(`Not found this category ID ${categoryId}`, { status: 404 }));
         }
     }
 
-
     // Check each location ID in the array
     if (!Array.isArray(location)) {
-        // Convert to array if it's not already
         location = [location];
     }
 
     for (const locationId of location) {
-        // Check if the ID exists in the database
         const checkLocation = await locationModel.findById(locationId);
         if (!checkLocation) {
             return next(new Error(`Not found this location ID ${locationId}`, { status: 404 }));
         }
     }
 
-
     // Check each brand ID in the array
     if (!Array.isArray(brand)) {
-        // Convert to array if it's not already
         brand = [brand];
     }
 
     for (const brandId of brand) {
-        // Check if the ID exists in the database
         const checkBrand = await brandModel.findById(brandId);
         if (!checkBrand) {
             return next(new Error(`Not found this brand ID ${brandId}`, { status: 404 }));
         }
     }
 
-
-    let link = ""
-    if (req.body.link) {
-
-        link = req.body.link
-    }
-
+    let link = req.body.link || "";
 
     const coupon = await couponModel.create({
         ...req.body,
@@ -226,12 +209,9 @@ export const createCoupon = asyncHandler(async (req, res, next) => {
 
     const usersFollowingBrand = await userModel.find({ follow: { $in: brand } });
 
-    let notification = []
-
     // Send notifications to users who follow the brand
     for (const user of usersFollowingBrand) {
-
-        notification = await notificationModel.create({
+        const notification = await notificationModel.create({
             header: {
                 en: req.body.code || "use discount",
                 ar: req.body.code || "استخدم الخصم"
@@ -244,11 +224,17 @@ export const createCoupon = asyncHandler(async (req, res, next) => {
             createdBy: req.user._id
         });
 
-        // console.log(notification);
+        // Add notification to the user's notification list
+        await userModel.updateOne(
+            { _id: user._id },
+            { $addToSet: { notification: notification._id } },
+            { new: true }
+        );
     }
 
-    return res.status(201).json({ message: 'success', coupon, notification });
+    return res.status(201).json({ message: 'success', coupon });
 });
+
 
 
 // export const updateCoupon = asyncHandler(async (req, res, next) => {
